@@ -6,15 +6,14 @@ return [
         'api/*',
         'storefront/*',
         'admin/*',
-        'health',
-        'sanctum/csrf-cookie',
+       
     ],
 
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
         'https://etstahashop.vercel.app',
-        'https://etstahashopadmin.vercel.app',
+        'https://etstahashopamin.vercel.app',
     ],
 
     'allowed_origins_patterns' => [],
