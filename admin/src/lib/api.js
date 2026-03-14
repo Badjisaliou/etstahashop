@@ -1,10 +1,10 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/admin'
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000/api/admin'
 
 export async function apiRequest(path, options = {}, token) {
   const headers = {
     Accept: 'application/json',
     ...(options.body ? { 'Content-Type': 'application/json' } : {}),
-    ...(options.headers || {}),
+    ...(options.headers ?? {}),
   }
 
   if (token) {
@@ -21,7 +21,7 @@ export async function apiRequest(path, options = {}, token) {
 
   if (!response.ok) {
     const message =
-      payload?.message ||
+      payload?.message ??
       (payload?.errors ? Object.values(payload.errors).flat().join(' ') : 'Une erreur est survenue.')
 
     throw new Error(message)
