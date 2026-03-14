@@ -1,10 +1,7 @@
 <?php
 
 return [
-
-    'paths' => [
-        'api/*',
-    ],
+    'paths' => ['api/*'],
 
     'allowed_methods' => ['*'],
 
@@ -22,5 +19,4 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => true,
-
 ];
