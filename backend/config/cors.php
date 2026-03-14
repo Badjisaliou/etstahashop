@@ -1,3 +1,5 @@
+<?php
+
 return [
 
     'paths' => [
@@ -10,6 +12,8 @@ return [
         'https://etstahashop.vercel.app',
         'https://etstahashopamin.vercel.app',
     ],
+
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
