@@ -26,13 +26,20 @@ function Start-AppProcess {
   $stdout = Join-Path $logDir ("$Name.out.log")
   $stderr = Join-Path $logDir ("$Name.err.log")
 
-  $process = Start-Process `
-    -FilePath $FilePath `
-    -ArgumentList $Arguments `
-    -WorkingDirectory $WorkingDirectory `
-    -RedirectStandardOutput $stdout `
-    -RedirectStandardError $stderr `
-    -PassThru
+  $escapedFilePath = '"' + $FilePath + '"'
+  $escapedArgs = ($Arguments | ForEach-Object { '"' + $_ + '"' }) -join ' '
+  $escapedStdout = '"' + $stdout + '"'
+  $escapedStderr = '"' + $stderr + '"'
+  $cmdArgs = "/c $escapedFilePath $escapedArgs 1>>$escapedStdout 2>>$escapedStderr"
+
+  $processInfo = New-Object System.Diagnostics.ProcessStartInfo
+  $processInfo.FileName = 'cmd.exe'
+  $processInfo.Arguments = $cmdArgs
+  $processInfo.WorkingDirectory = $WorkingDirectory
+  $processInfo.UseShellExecute = $false
+  $processInfo.CreateNoWindow = $true
+
+  $process = [System.Diagnostics.Process]::Start($processInfo)
 
   [PSCustomObject]@{
     name = $Name

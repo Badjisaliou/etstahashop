@@ -1,12 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\HealthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/health', function () {
-    return response()->json([
-        'message' => 'ETS Taha Shop API is running.',
-    ]);
-});
+Route::get('/health', HealthController::class);
 
 Route::prefix('storefront')->group(function () {
     require base_path('routes/storefront.php');

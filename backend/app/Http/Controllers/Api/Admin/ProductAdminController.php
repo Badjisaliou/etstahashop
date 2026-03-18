@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Support\CatalogCache;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -84,6 +85,7 @@ class ProductAdminController extends Controller
 
             return $product->load(['category:id,name,slug', 'images']);
         });
+        CatalogCache::bust();
 
         return response()->json([
             'message' => 'Produit cree avec succes.',
@@ -116,6 +118,7 @@ class ProductAdminController extends Controller
 
             return $product->refresh()->load(['category:id,name,slug', 'images']);
         });
+        CatalogCache::bust();
 
         return response()->json([
             'message' => 'Produit modifie avec succes.',
@@ -126,6 +129,7 @@ class ProductAdminController extends Controller
     public function destroy(Product $product): JsonResponse
     {
         $product->delete();
+        CatalogCache::bust();
 
         return response()->json([
             'message' => 'Produit supprime avec succes.',
@@ -137,6 +141,7 @@ class ProductAdminController extends Controller
         $product->update([
             'is_active' => ! $product->is_active,
         ]);
+        CatalogCache::bust();
 
         return response()->json([
             'message' => $product->is_active ? 'Produit active avec succes.' : 'Produit desactive avec succes.',

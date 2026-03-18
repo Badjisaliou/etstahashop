@@ -18,6 +18,17 @@ foreach ($check in $checks) {
     }
 
     Write-Host ("[OK] {0}: {1}" -f $check.Name, $check.Url)
+
+    if ($check.Name -eq 'Backend health') {
+      $health = $response.Content | ConvertFrom-Json
+      if ($null -ne $health.services) {
+        $redisStatus = $health.services.redis.status
+        $storageStatus = $health.services.storage.status
+        $storageDisk = $health.services.storage.disk
+        Write-Host ("     Redis: {0}" -f $redisStatus)
+        Write-Host ("     Storage ({0}): {1}" -f $storageDisk, $storageStatus)
+      }
+    }
   } catch {
     $failed = $true
     Write-Host ("[FAIL] {0}: {1}" -f $check.Name, $_.Exception.Message)

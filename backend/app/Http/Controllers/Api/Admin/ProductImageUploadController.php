@@ -18,13 +18,14 @@ class ProductImageUploadController extends Controller
 
         $file = $validated['image'];
         $filename = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('products/uploads', $filename, 'public');
+        $disk = config('filesystems.media_disk', 'public');
+        $path = $file->storeAs('products/uploads', $filename, $disk);
 
         return response()->json([
             'message' => 'Image televersee avec succes.',
             'data' => [
                 'path' => $path,
-                'url' => Storage::disk('public')->url($path),
+                'url' => Storage::disk($disk)->url($path),
                 'original_name' => $file->getClientOriginalName(),
             ],
         ], 201);

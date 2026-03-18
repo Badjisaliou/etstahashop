@@ -54,6 +54,12 @@ Verifier les parcours critiques :
 powershell -ExecutionPolicy Bypass -File .\scripts\smoke-critical.ps1
 ```
 
+Verifier l'etat de la phase 6 (Redis + Cloud Storage) :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check-phase6.ps1
+```
+
 Arreter les services :
 
 ```powershell
@@ -108,3 +114,51 @@ npm run dev
 - `APP_URL` du backend doit pointer vers `http://127.0.0.1:8000` pour des URLs d'images correctes.
 - L'application mobile est alignee sur `api/storefront`.
 - Le smoke test critique suppose la presence du compte admin seed `admin@etstaha.shop` / `admin12345`.
+
+## Phase 6: Redis + Cloud Storage
+
+La phase 6 est demarree dans le backend Laravel avec:
+
+- cache catalogue pret pour Redis (`categories`, `products index`, `product show`)
+- invalidation automatique du cache catalogue lors des operations admin produit/categorie
+- disque media configurable pour les images produit via `MEDIA_DISK` (`public` en local, `s3` en cloud)
+- endpoint de sante enrichi `GET /api/health` avec statut `redis` et `storage`
+- profil cloud pret a l'emploi dans `backend/.env.cloud.example`
+
+Configuration locale (sans cloud):
+
+```env
+CACHE_STORE=database
+QUEUE_CONNECTION=database
+MEDIA_DISK=public
+```
+
+Configuration cloud typique:
+
+```env
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+MEDIA_DISK=s3
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=...
+AWS_BUCKET=...
+AWS_URL=...
+```
+
+Notes importantes de finalisation:
+
+- Si `REDIS_CLIENT=phpredis`, l'extension PHP `redis` doit etre installee.
+- Alternative possible: `REDIS_CLIENT=predis` avec package `predis/predis` installe via Composer.
+- Pour activer completement la phase 6 en cloud:
+1. copier `backend/.env.cloud.example` vers `backend/.env`
+2. renseigner variables MySQL, Redis, AWS
+3. lancer `php artisan config:clear`
+4. verifier avec `scripts/check-phase6.ps1` puis `scripts/check-local.ps1`
+
+## Deploiement Railway + Vercel
+
+Le guide pret a l'emploi pour finaliser la phase 6 en ligne est ici:
+
+- `backend/RAILWAY_PHASE6.md`

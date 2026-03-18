@@ -1,0 +1,99 @@
+# Railway + Vercel (Phase 6)
+
+Ce guide finalise Redis + Cloud Storage en production.
+
+## 1) Service backend web (Railway)
+
+Build command:
+
+```bash
+composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+```
+
+Start command:
+
+```bash
+php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan serve --host=0.0.0.0 --port=$PORT
+```
+
+## 2) Service worker queue (Railway)
+
+Creez un 2e service Railway depuis le meme repo backend.
+
+Build command:
+
+```bash
+composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+```
+
+Start command:
+
+```bash
+php artisan config:cache && php artisan queue:work redis --sleep=1 --tries=3 --timeout=120
+```
+
+## 3) Variables d'environnement backend (Railway)
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://<votre-backend>.up.railway.app
+
+LOG_CHANNEL=stack
+LOG_LEVEL=info
+
+DB_CONNECTION=mysql
+DB_HOST=...
+DB_PORT=3306
+DB_DATABASE=...
+DB_USERNAME=...
+DB_PASSWORD=...
+
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+
+REDIS_CLIENT=predis
+REDIS_HOST=...
+REDIS_PORT=6379
+REDIS_PASSWORD=...
+REDIS_DB=0
+REDIS_CACHE_DB=1
+REDIS_QUEUE=default
+
+FILESYSTEM_DISK=s3
+MEDIA_DISK=s3
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=...
+AWS_BUCKET=...
+AWS_URL=...
+AWS_ENDPOINT=
+AWS_USE_PATH_STYLE_ENDPOINT=false
+```
+
+Notes:
+- `REDIS_CLIENT=predis` evite la dependance a l'extension PHP redis.
+- Pour Cloudflare R2 / DigitalOcean Spaces, renseignez `AWS_ENDPOINT`.
+
+## 4) Variables d'environnement Vercel (storefront + admin)
+
+Storefront:
+
+```env
+VITE_API_BASE_URL=https://<votre-backend>.up.railway.app/api/storefront
+VITE_ADMIN_URL=https://<votre-admin>.vercel.app
+```
+
+Admin:
+
+```env
+VITE_API_BASE_URL=https://<votre-backend>.up.railway.app/api/admin
+```
+
+## 5) Verification post-deploiement
+
+1. `GET /api/health` doit retourner `services.redis.status = up`
+2. `GET /api/health` doit retourner `services.storage.status = up`
+3. Upload image depuis admin -> image visible dans storefront
+4. Creation commande -> job traite par le worker queue

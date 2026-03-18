@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Support\CatalogCache;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -68,6 +69,7 @@ class CategoryAdminController extends Controller
         ]);
 
         $category->loadCount('products');
+        CatalogCache::bust();
 
         return response()->json([
             'message' => 'Categorie creee avec succes.',
@@ -88,6 +90,7 @@ class CategoryAdminController extends Controller
         ]);
 
         $category->refresh()->loadCount('products');
+        CatalogCache::bust();
 
         return response()->json([
             'message' => 'Categorie modifiee avec succes.',
@@ -110,6 +113,7 @@ class CategoryAdminController extends Controller
         }
 
         $category->delete();
+        CatalogCache::bust();
 
         return response()->json([
             'message' => 'Categorie supprimee avec succes.',
@@ -121,6 +125,7 @@ class CategoryAdminController extends Controller
         $category->update([
             'is_active' => ! $category->is_active,
         ]);
+        CatalogCache::bust();
 
         return response()->json([
             'message' => $category->is_active ? 'Categorie activee avec succes.' : 'Categorie desactivee avec succes.',
