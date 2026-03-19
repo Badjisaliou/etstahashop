@@ -145,7 +145,7 @@ function CatalogPage() {
       </section>
 
       {loading ? (
-        <section className="catalog-grid">
+        <section className="catalog-grid catalog-grid-fixed">
           {Array.from({ length: 6 }).map((_, index) => (
             <article className="product-card skeleton-card" key={`skeleton-${index}`}>
               <div className="product-thumb shimmer" />
@@ -166,7 +166,7 @@ function CatalogPage() {
           </button>
         </section>
       ) : (
-        <section className="catalog-grid">
+        <section className="catalog-grid catalog-grid-fixed">
           {products.map((product, index) => (
             <article className="product-card product-card-animated" key={product.id} style={{ animationDelay: `${index * 40}ms` }}>
               <div className="product-thumb">

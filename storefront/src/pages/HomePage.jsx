@@ -95,34 +95,43 @@ function HomePage() {
           <h2>Selection de la semaine</h2>
           <p>{loading ? 'Chargement...' : `${featuredProducts.length} produits mis en avant.`}</p>
         </div>
-        <div className="catalog-grid">
-          {featuredProducts.map((product, index) => (
-            <article className="product-card product-card-animated" key={product.id} style={{ animationDelay: `${index * 70}ms` }}>
-              <div className="product-thumb">
-                {product.images?.[0]?.url ? (
-                  <img
-                    src={product.images[0].url}
-                    alt={product.images[0].alt_text || product.name}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : (
-                  <span>Aucune image</span>
-                )}
-              </div>
-              <div className="product-card-body">
-                <strong>{product.name}</strong>
-                <p>{product.short_description || 'Produit disponible dans le catalogue.'}</p>
-                <div className="product-card-footer">
-                  <span>{formatPrice(product.price)} XOF</span>
-                  <Link className="mini-button" to={`/products/${product.slug}`}>
-                    Voir le produit
-                  </Link>
+        {featuredProducts.length === 0 ? (
+          <div className="empty-state">
+            <p className="hint">Aucun produit vedette pour le moment.</p>
+            <Link className="button ghost" to="/catalogue">
+              Parcourir le catalogue
+            </Link>
+          </div>
+        ) : (
+          <div className="catalog-grid catalog-grid-fixed">
+            {featuredProducts.map((product, index) => (
+              <article className="product-card product-card-animated" key={product.id} style={{ animationDelay: `${index * 70}ms` }}>
+                <div className="product-thumb">
+                  {product.images?.[0]?.url ? (
+                    <img
+                      src={product.images[0].url}
+                      alt={product.images[0].alt_text || product.name}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span>Aucune image</span>
+                  )}
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
+                <div className="product-card-body">
+                  <strong>{product.name}</strong>
+                  <p>{product.short_description || 'Produit disponible dans le catalogue.'}</p>
+                  <div className="product-card-footer">
+                    <span>{formatPrice(product.price)} XOF</span>
+                    <Link className="mini-button" to={`/products/${product.slug}`}>
+                      Voir le produit
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="panel cta-band reveal-up">

@@ -2,7 +2,6 @@ import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useShopAuth } from '../auth'
 import { useShop } from '../shop'
 
-const ADMIN_APP_URL = import.meta.env.VITE_ADMIN_APP_URL ?? 'http://127.0.0.1:5174'
 const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
 
 function PublicLayout() {
@@ -60,9 +59,6 @@ function PublicLayout() {
               </NavLink>
             </>
           )}
-          <a className="shop-link admin" href={ADMIN_APP_URL} target="_blank" rel="noreferrer">
-            Back-office
-          </a>
         </nav>
       </header>
 

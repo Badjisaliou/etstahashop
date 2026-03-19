@@ -525,6 +525,15 @@ textarea {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
+.catalog-grid-fixed {
+  grid-template-columns: repeat(auto-fill, minmax(290px, 290px));
+  justify-content: center;
+}
+
+.catalog-grid-fixed .product-card {
+  width: 290px;
+}
+
 .chip-grid,
 .tracking-grid {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
