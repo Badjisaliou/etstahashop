@@ -39,29 +39,33 @@ function DashboardPage() {
     <>
       <StatusBanner message={message} tone={message.includes('succes') ? 'success' : 'info'} />
       <section className="stats-grid">
-        <article className="stat-card panel">
+        <article className="stat-card panel admin-kpi-card">
           <span className="stat-label">Categories</span>
           <strong>{loading ? '...' : categoriesCount}</strong>
+          <span className="kpi-trend">Structure catalogue</span>
         </article>
-        <article className="stat-card panel">
+        <article className="stat-card panel admin-kpi-card">
           <span className="stat-label">Produits</span>
           <strong>{loading ? '...' : productsCount}</strong>
+          <span className="kpi-trend">Offre disponible</span>
         </article>
-        <article className="stat-card panel">
+        <article className="stat-card panel admin-kpi-card">
           <span className="stat-label">Commandes</span>
           <strong>{loading ? '...' : ordersCount}</strong>
+          <span className="kpi-trend">Suivi operationnel</span>
         </article>
-        <article className="stat-card panel">
+        <article className="stat-card panel admin-kpi-card">
           <span className="stat-label">API</span>
           <strong className="small-strong">{API_BASE_URL}</strong>
+          <span className="kpi-trend">Connexion backend</span>
         </article>
       </section>
 
       <section className="content-grid single-column">
-        <article className="panel">
+        <article className="panel reveal-up">
           <div className="section-heading">
-            <h2>Phase 2 en cours</h2>
-            <p>Le back-office couvre maintenant le catalogue, les images, les commandes et le socle e-commerce.</p>
+            <h2>Operations admin</h2>
+            <p>Le back-office couvre le catalogue, les images Cloudinary, les commandes et les validations de paiement.</p>
           </div>
           <div className="check-grid">
             <div className="check-card">

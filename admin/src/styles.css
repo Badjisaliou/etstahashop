@@ -360,6 +360,36 @@ textarea {
   gap: 0.75rem;
 }
 
+.admin-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.admin-brand-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 1px solid rgba(242, 193, 78, 0.45);
+  box-shadow: 0 10px 22px rgba(8, 36, 75, 0.2);
+  background: #ffffff;
+}
+
+.admin-brand-mark {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  background: linear-gradient(145deg, #0e3a78, #08244b);
+  box-shadow: inset 0 0 0 1px rgba(242, 193, 78, 0.5), 0 10px 22px rgba(8, 36, 75, 0.2);
+}
+
 .message {
   margin: 0;
   padding: 0.95rem 1rem;
@@ -422,6 +452,20 @@ textarea {
   display: block;
   margin-top: 0.5rem;
   font-size: 1.8rem;
+}
+
+.admin-kpi-card {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(242, 193, 78, 0.22), transparent 36%),
+    rgba(255, 255, 255, 0.9);
+  border-color: rgba(14, 58, 120, 0.12);
+}
+
+.kpi-trend {
+  display: block;
+  margin-top: 0.65rem;
+  font-size: 0.82rem;
+  color: #5a687d;
 }
 
 .small-strong {
@@ -653,6 +697,11 @@ textarea {
   .align-right {
     text-align: left;
     justify-content: flex-start;
+  }
+
+  .admin-brand-row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .cart-row-side input {
