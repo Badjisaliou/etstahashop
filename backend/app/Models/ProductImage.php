@@ -37,6 +37,10 @@ class ProductImage extends Model
 
     public function getUrlAttribute(): string
     {
+        if (str_starts_with($this->path, 'http://') || str_starts_with($this->path, 'https://')) {
+            return $this->path;
+        }
+
         return Storage::disk(config('filesystems.media_disk', 'public'))->url($this->path);
     }
 }

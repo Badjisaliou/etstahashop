@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\CloudinaryUploader;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
@@ -10,6 +11,11 @@ use Throwable;
 
 class HealthController extends Controller
 {
+    public function __construct(
+        private readonly CloudinaryUploader $cloudinaryUploader
+    ) {
+    }
+
     public function __invoke(): JsonResponse
     {
         $mediaDisk = (string) config('filesystems.media_disk', 'public');
@@ -41,6 +47,10 @@ class HealthController extends Controller
 
     private function checkStorage(string $disk): array
     {
+        if ($disk === 'cloudinary') {
+            return $this->cloudinaryUploader->ping();
+        }
+
         try {
             Storage::disk($disk)->files('');
 

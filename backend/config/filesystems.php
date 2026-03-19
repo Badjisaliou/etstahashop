@@ -21,7 +21,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Product images are stored on this disk. Keep "public" for local setup
-    | and switch to "s3" (or another cloud disk) for production.
+    | and switch to "cloudinary" for production media hosting.
     |
     */
 

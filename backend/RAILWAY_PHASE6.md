@@ -1,6 +1,6 @@
 # Railway + Vercel (Phase 6)
 
-Ce guide finalise Redis + Cloud Storage en production.
+Ce guide finalise Redis + Cloudinary en production.
 
 ## 1) Service backend web (Railway)
 
@@ -61,20 +61,17 @@ REDIS_DB=0
 REDIS_CACHE_DB=1
 REDIS_QUEUE=default
 
-FILESYSTEM_DISK=s3
-MEDIA_DISK=s3
-AWS_ACCESS_KEY_ID=...
-AWS_SECRET_ACCESS_KEY=...
-AWS_DEFAULT_REGION=...
-AWS_BUCKET=...
-AWS_URL=...
-AWS_ENDPOINT=
-AWS_USE_PATH_STYLE_ENDPOINT=false
+FILESYSTEM_DISK=local
+MEDIA_DISK=cloudinary
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+CLOUDINARY_FOLDER=products/uploads
 ```
 
 Notes:
 - `REDIS_CLIENT=predis` evite la dependance a l'extension PHP redis.
-- Pour Cloudflare R2 / DigitalOcean Spaces, renseignez `AWS_ENDPOINT`.
+- `MEDIA_DISK=cloudinary` active l'upload images via l'API Cloudinary.
 
 ## 4) Variables d'environnement Vercel (storefront + admin)
 
