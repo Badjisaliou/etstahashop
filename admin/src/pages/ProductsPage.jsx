@@ -27,6 +27,10 @@ const initialFilters = {
   page: 1,
 }
 
+function formatPrice(value) {
+  return `${new Intl.NumberFormat('fr-FR').format(Number(value ?? 0))} XOF`
+}
+
 function ProductsPage() {
   const { token } = useAdminAuth()
   const [categories, setCategories] = useState([])
@@ -296,7 +300,7 @@ function ProductsPage() {
           </div>
           <form className="form-grid" onSubmit={handleSubmit}>
             <label>
-              <span>Categorie</span>
+              <span>Categorie du produit</span>
               <select value={form.category_id} onChange={(event) => setForm((current) => ({ ...current, category_id: event.target.value }))} required>
                 <option value="">Selectionner</option>
                 {categoryOptions.map((option) => (
@@ -307,36 +311,54 @@ function ProductsPage() {
               </select>
             </label>
             <label>
-              <span>Nom</span>
-              <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} required />
+              <span>Nom du produit</span>
+              <input
+                value={form.name}
+                onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+                placeholder="Ex: Ecouteurs Bluetooth"
+                required
+              />
             </label>
             <label>
-              <span>Slug</span>
-              <input value={form.slug} onChange={(event) => setForm((current) => ({ ...current, slug: event.target.value }))} />
+              <span>URL simplifiee (slug)</span>
+              <input
+                value={form.slug}
+                onChange={(event) => setForm((current) => ({ ...current, slug: event.target.value }))}
+                placeholder="Ex: ecouteurs-bluetooth"
+              />
             </label>
             <label>
-              <span>SKU</span>
-              <input value={form.sku} onChange={(event) => setForm((current) => ({ ...current, sku: event.target.value }))} required />
+              <span>Reference interne (SKU)</span>
+              <input
+                value={form.sku}
+                onChange={(event) => setForm((current) => ({ ...current, sku: event.target.value }))}
+                placeholder="Ex: ETS-ECOUTE-001"
+                required
+              />
             </label>
             <label>
-              <span>Prix</span>
+              <span>Prix de vente (XOF)</span>
               <input type="number" min="0" step="0.01" value={form.price} onChange={(event) => setForm((current) => ({ ...current, price: event.target.value }))} required />
             </label>
             <label>
-              <span>Prix compare</span>
+              <span>Prix barre (optionnel)</span>
               <input type="number" min="0" step="0.01" value={form.compare_price} onChange={(event) => setForm((current) => ({ ...current, compare_price: event.target.value }))} />
             </label>
             <label>
-              <span>Stock</span>
+              <span>Quantite en stock</span>
               <input type="number" min="0" step="1" value={form.stock_quantity} onChange={(event) => setForm((current) => ({ ...current, stock_quantity: event.target.value }))} />
             </label>
             <label>
-              <span>Televerser une image</span>
+              <span>Image du produit</span>
               <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleImageUpload} disabled={uploadingImage} />
             </label>
             <label className="full-span">
-              <span>Chemin image</span>
-              <input value={form.image_path} onChange={(event) => setForm((current) => ({ ...current, image_path: event.target.value }))} placeholder="products/uploads/uuid.jpg" />
+              <span>Chemin ou URL de l'image</span>
+              <input
+                value={form.image_path}
+                onChange={(event) => setForm((current) => ({ ...current, image_path: event.target.value }))}
+                placeholder="Ex: products/uploads/uuid.jpg ou https://..."
+              />
             </label>
             {imagePreviewUrl ? (
               <div className="image-preview full-span">
@@ -344,21 +366,30 @@ function ProductsPage() {
               </div>
             ) : null}
             <label className="full-span">
-              <span>Description courte</span>
-              <input value={form.short_description} onChange={(event) => setForm((current) => ({ ...current, short_description: event.target.value }))} />
+              <span>Description courte (accroche)</span>
+              <input
+                value={form.short_description}
+                onChange={(event) => setForm((current) => ({ ...current, short_description: event.target.value }))}
+                placeholder="Texte court affiche dans les cartes produit."
+              />
             </label>
             <label className="full-span">
-              <span>Description</span>
-              <textarea rows="4" value={form.description} onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))} />
+              <span>Description detaillee</span>
+              <textarea
+                rows="4"
+                value={form.description}
+                onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
+                placeholder="Details techniques, usages, points forts..."
+              />
             </label>
             {productValidationError ? <p className="field-error full-span">{productValidationError}</p> : null}
             <label className="checkbox-row">
               <input type="checkbox" checked={form.is_active} onChange={(event) => setForm((current) => ({ ...current, is_active: event.target.checked }))} />
-              <span>Produit actif</span>
+              <span>Produit visible sur la boutique</span>
             </label>
             <label className="checkbox-row">
               <input type="checkbox" checked={form.is_featured} onChange={(event) => setForm((current) => ({ ...current, is_featured: event.target.checked }))} />
-              <span>Produit en vedette</span>
+              <span>Afficher dans \"produits vedette\"</span>
             </label>
             <div className="action-row">
               <button className="button primary" type="submit" disabled={saving || uploadingImage || Boolean(productValidationError)}>
@@ -384,7 +415,7 @@ function ProductsPage() {
               <input
                 value={filters.search}
                 onChange={(event) => setFilters((current) => ({ ...current, search: event.target.value }))}
-                placeholder="Rechercher par nom, SKU, slug ou description"
+                placeholder="Rechercher par nom, reference SKU, slug ou description"
               />
               <select
                 value={filters.categoryId}
@@ -432,21 +463,23 @@ function ProductsPage() {
                 <div>
                   <strong>{product.name}</strong>
                   <p>{product.short_description || product.description || 'Sans description'}</p>
-                  <div className="muted-line">{product.sku} | {product.slug}</div>
+                  <div className="muted-line">Ref: {product.sku} | URL: {product.slug}</div>
                 </div>
                 <div className="product-meta">
-                  <span>{product.category?.name ?? 'Sans categorie'}</span>
-                  <span>{product.price} XOF</span>
-                  <span>Stock {product.stock_quantity}</span>
-                  <span>{product.is_active ? 'Actif' : 'Inactif'}</span>
-                  <div className="table-actions align-right">
-                    <button className="mini-button" type="button" onClick={() => startEdit(product)}>
+                  <span className="muted-line">{product.category?.name ?? 'Sans categorie'}</span>
+                  <span>{formatPrice(product.price)}</span>
+                  <span className={`status-badge ${Number(product.stock_quantity) > 0 ? 'ok' : 'warn'}`}>
+                    {Number(product.stock_quantity) > 0 ? `Stock ${product.stock_quantity}` : 'Rupture'}
+                  </span>
+                  <span className={`status-badge ${product.is_active ? 'ok' : 'neutral'}`}>{product.is_active ? 'Actif' : 'Inactif'}</span>
+                  <div className="table-actions align-right action-cluster">
+                    <button className="mini-button tiny" type="button" onClick={() => startEdit(product)}>
                       Editer
                     </button>
-                    <button className="mini-button" type="button" onClick={() => handleToggleStatus(product)}>
+                    <button className="mini-button tiny" type="button" onClick={() => handleToggleStatus(product)}>
                       {product.is_active ? 'Desactiver' : 'Activer'}
                     </button>
-                    <button className="mini-button danger" type="button" onClick={() => handleDelete(product)}>
+                    <button className="mini-button danger tiny" type="button" onClick={() => handleDelete(product)}>
                       Supprimer
                     </button>
                   </div>

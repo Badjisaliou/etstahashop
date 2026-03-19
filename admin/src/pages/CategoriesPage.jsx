@@ -180,15 +180,24 @@ function CategoriesPage() {
           </div>
           <form className="form-grid" onSubmit={handleSubmit}>
             <label>
-              <span>Nom</span>
-              <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} required />
+              <span>Nom de la categorie</span>
+              <input
+                value={form.name}
+                onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+                placeholder="Ex: Accessoires"
+                required
+              />
             </label>
             <label>
-              <span>Slug</span>
-              <input value={form.slug} onChange={(event) => setForm((current) => ({ ...current, slug: event.target.value }))} />
+              <span>URL simplifiee (slug)</span>
+              <input
+                value={form.slug}
+                onChange={(event) => setForm((current) => ({ ...current, slug: event.target.value }))}
+                placeholder="Ex: accessoires-telephone"
+              />
             </label>
             <label>
-              <span>Parent</span>
+              <span>Categorie parente</span>
               <select value={form.parent_id} onChange={(event) => setForm((current) => ({ ...current, parent_id: event.target.value }))}>
                 <option value="">Aucun</option>
                 {parentCategories
@@ -201,13 +210,18 @@ function CategoriesPage() {
               </select>
             </label>
             <label className="full-span">
-              <span>Description</span>
-              <textarea rows="4" value={form.description} onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))} />
+              <span>Description de la categorie</span>
+              <textarea
+                rows="4"
+                value={form.description}
+                onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
+                placeholder="Description visible pour mieux organiser le catalogue."
+              />
             </label>
             {categoryValidationError ? <p className="field-error full-span">{categoryValidationError}</p> : null}
             <label className="checkbox-row">
               <input type="checkbox" checked={form.is_active} onChange={(event) => setForm((current) => ({ ...current, is_active: event.target.checked }))} />
-              <span>Categorie active</span>
+              <span>Categorie visible sur la boutique</span>
             </label>
             <div className="action-row">
               <button className="button primary" type="submit" disabled={saving || Boolean(categoryValidationError)}>

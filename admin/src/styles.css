@@ -341,6 +341,12 @@ textarea {
   text-decoration: none;
 }
 
+.mini-button.tiny {
+  padding: 0.36rem 0.62rem;
+  min-height: 34px;
+  font-size: 0.82rem;
+}
+
 .mini-button.danger {
   color: #a12323;
   border-color: rgba(161, 35, 35, 0.18);
@@ -512,8 +518,36 @@ textarea {
   flex-wrap: wrap;
 }
 
+.action-cluster {
+  gap: 0.42rem;
+}
+
 .align-right {
   justify-content: flex-end;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.status-badge.ok {
+  background: rgba(34, 139, 34, 0.14);
+  color: #1f6f1f;
+}
+
+.status-badge.warn {
+  background: rgba(204, 51, 51, 0.14);
+  color: #a12323;
+}
+
+.status-badge.neutral {
+  background: rgba(17, 32, 59, 0.1);
+  color: #34425b;
 }
 
 .product-list,
@@ -702,6 +736,42 @@ textarea {
   .admin-brand-row {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .responsive-cards table,
+  .responsive-cards thead,
+  .responsive-cards tbody,
+  .responsive-cards tr,
+  .responsive-cards td {
+    display: block;
+    width: 100%;
+  }
+
+  .responsive-cards thead {
+    display: none;
+  }
+
+  .responsive-cards tr {
+    padding: 0.8rem;
+    border-radius: 16px;
+    border: 1px solid rgba(17, 32, 59, 0.08);
+    margin-bottom: 0.75rem;
+    background: rgba(255, 255, 255, 0.86);
+  }
+
+  .responsive-cards td {
+    border: none;
+    padding: 0.45rem 0;
+  }
+
+  .responsive-cards td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #5a687d;
+    margin-bottom: 0.2rem;
   }
 
   .cart-row-side input {

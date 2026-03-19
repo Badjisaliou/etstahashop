@@ -3,6 +3,8 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import StatusBanner from '../components/StatusBanner'
 import { useAdminAuth } from '../auth'
 
+const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
+
 function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -33,19 +35,30 @@ function LoginPage() {
     <main className="app-shell auth-layout">
       <section className="panel accent-panel">
         <p className="eyebrow">Administration ETS Taha Shop</p>
-        <h1>Stabiliser le back-office catalogue</h1>
-        <p className="lead">
-          Connecte-toi pour gerer les categories et les produits avec un vrai flux admin React relie au backend Laravel.
-        </p>
+        <div className="admin-brand-row">
+          {BRAND_LOGO_URL ? (
+            <img className="admin-brand-logo" src={BRAND_LOGO_URL} alt="Logo ETS Taha Shop" />
+          ) : (
+            <span className="admin-brand-mark" aria-hidden="true">
+              ET
+            </span>
+          )}
+          <div>
+            <h1>Connexion securisee back-office</h1>
+            <p className="lead">
+              Connecte-toi pour gerer les categories, les produits et les commandes avec une vue admin centralisee.
+            </p>
+          </div>
+        </div>
         <ul className="feature-list">
           <li>Auth Bearer token</li>
           <li>CRUD categories et produits</li>
-          <li>Routes separees pour l administration</li>
+          <li>Validation commandes et paiements</li>
         </ul>
       </section>
 
       <section className="panel auth-panel">
-        <h2>Connexion admin</h2>
+        <h2>Connexion administrateur</h2>
         <form className="form-grid" onSubmit={handleSubmit}>
           <label>
             <span>Email</span>

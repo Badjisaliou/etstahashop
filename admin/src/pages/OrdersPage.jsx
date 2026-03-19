@@ -27,6 +27,22 @@ function formatPaymentMethod(value) {
   return value || 'Non renseigne'
 }
 
+function formatStatusLabel(value) {
+  const map = {
+    pending: 'En attente',
+    confirmed: 'Confirmee',
+    processing: 'En preparation',
+    shipped: 'Expediee',
+    delivered: 'Livree',
+    cancelled: 'Annulee',
+    paid: 'Paye',
+    failed: 'Echoue',
+    refunded: 'Rembourse',
+  }
+
+  return map[value] ?? value
+}
+
 function OrdersPage() {
   const { token } = useAdminAuth()
   const [orders, setOrders] = useState([])
@@ -190,7 +206,7 @@ function OrdersPage() {
                 <option value="all">Tous les statuts</option>
                 {orderStatusOptions.map((status) => (
                   <option key={status} value={status}>
-                    {status}
+                    {formatStatusLabel(status)}
                   </option>
                 ))}
               </select>
@@ -203,7 +219,7 @@ function OrdersPage() {
                 <option value="all">Tous les paiements</option>
                 {paymentStatusOptions.map((status) => (
                   <option key={status} value={status}>
-                    {status}
+                    {formatStatusLabel(status)}
                   </option>
                 ))}
               </select>
@@ -219,7 +235,7 @@ function OrdersPage() {
             </div>
           </form>
 
-          <div className="table-wrap">
+          <div className="table-wrap responsive-cards">
             <table>
               <thead>
                 <tr>
@@ -233,26 +249,28 @@ function OrdersPage() {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id}>
-                    <td>
+                    <td data-label="Commande">
                       <strong>{order.order_number}</strong>
                       <div className="muted-line">{order.created_at ? new Date(order.created_at).toLocaleString() : 'Date indisponible'}</div>
                     </td>
-                    <td>
+                    <td data-label="Client">
                       <strong>{order.address?.full_name ?? 'Client inconnu'}</strong>
                       <div className="muted-line">{order.address?.phone ?? 'Sans telephone'}</div>
                     </td>
-                    <td>
+                    <td data-label="Montant">
                       <strong>{order.total_amount} {order.currency}</strong>
-                      <div className="muted-line">{order.status}</div>
+                      <div className={`status-badge ${order.status === 'cancelled' ? 'warn' : 'ok'}`}>{formatStatusLabel(order.status)}</div>
                     </td>
-                    <td>
+                    <td data-label="Paiement">
                       <strong>{formatPaymentMethod(order.payment_method)}</strong>
-                      <div className="muted-line">{order.payment_status}</div>
+                      <div className={`status-badge ${order.payment_status === 'paid' ? 'ok' : order.payment_status === 'failed' ? 'warn' : 'neutral'}`}>
+                        {formatStatusLabel(order.payment_status)}
+                      </div>
                       <div className="muted-line">{order.payment_reference ?? 'Sans reference'}</div>
                     </td>
-                    <td>
-                      <div className="table-actions">
-                        <button className="mini-button" type="button" onClick={() => selectOrder(order.id)}>
+                    <td data-label="Actions">
+                      <div className="table-actions action-cluster">
+                        <button className="mini-button tiny" type="button" onClick={() => selectOrder(order.id)}>
                           Voir / Editer
                         </button>
                       </div>
@@ -340,7 +358,7 @@ function OrdersPage() {
                       <select value={statusForm.status} onChange={(event) => setStatusForm((current) => ({ ...current, status: event.target.value }))}>
                         {orderStatusOptions.map((status) => (
                           <option key={status} value={status}>
-                            {status}
+                            {formatStatusLabel(status)}
                           </option>
                         ))}
                       </select>
@@ -350,7 +368,7 @@ function OrdersPage() {
                       <select value={statusForm.payment_status} onChange={(event) => setStatusForm((current) => ({ ...current, payment_status: event.target.value }))}>
                         {paymentStatusOptions.map((status) => (
                           <option key={status} value={status}>
-                            {status}
+                            {formatStatusLabel(status)}
                           </option>
                         ))}
                       </select>
