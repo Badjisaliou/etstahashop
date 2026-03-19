@@ -78,14 +78,15 @@ Notes:
 Storefront:
 
 ```env
-VITE_API_BASE_URL=https://<votre-backend>.up.railway.app/api/storefront
-VITE_ADMIN_URL=https://<votre-admin>.vercel.app
+VITE_API_URL=https://<votre-backend>.up.railway.app/api/storefront
+VITE_ADMIN_APP_URL=https://<votre-admin>.vercel.app
+VITE_BRAND_LOGO_URL=https://res.cloudinary.com/<cloud_name>/image/upload/<public_id>.png
 ```
 
 Admin:
 
 ```env
-VITE_API_BASE_URL=https://<votre-backend>.up.railway.app/api/admin
+VITE_API_URL=https://<votre-backend>.up.railway.app/api/admin
 ```
 
 ## 5) Verification post-deploiement
