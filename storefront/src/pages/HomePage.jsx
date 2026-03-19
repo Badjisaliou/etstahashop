@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { apiRequest } from '../lib/api'
 
+function formatPrice(value) {
+  return new Intl.NumberFormat('fr-FR').format(Number(value ?? 0))
+}
+
 function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [categories, setCategories] = useState([])
@@ -32,29 +36,48 @@ function HomePage() {
 
   return (
     <div className="shop-stack">
-      <section className="hero-panel">
+      <section className="hero-panel hero-grid reveal-up">
         <div>
-          <p className="eyebrow">Boutique en ligne</p>
-          <h1 className="shop-title">Les produits ETS Taha Shop, sur le web et bientot sur mobile.</h1>
+          <p className="eyebrow">Etablissement Taha</p>
+          <h1 className="shop-title">Votre boutique digitale, fiable, rapide et claire.</h1>
           <p className="shop-lead">
-            Catalogue, panier et commande sont maintenant relies au backend Laravel deja en place.
+            Explorez les categories, ajoutez vos produits au panier et finalisez votre commande en quelques clics.
           </p>
           <div className="hero-actions">
             <Link className="button primary" to="/catalogue">
-              Voir le catalogue
+              Explorer les produits
             </Link>
-            <Link className="button ghost" to="/cart">
-              Ouvrir le panier
+            <Link className="button ghost" to="/track-order">
+              Suivre une commande
             </Link>
           </div>
+          <div className="trust-strip">
+            <span className="trust-pill">Paiement confirme manuellement</span>
+            <span className="trust-pill">Support local</span>
+            <span className="trust-pill">Livraison suivie</span>
+          </div>
+        </div>
+        <div className="hero-insights">
+          <article className="metric-card">
+            <p>Categories actives</p>
+            <strong>{categories.length}</strong>
+          </article>
+          <article className="metric-card">
+            <p>Produits en vedette</p>
+            <strong>{featuredProducts.length}</strong>
+          </article>
+          <article className="metric-card">
+            <p>Positionnement</p>
+            <strong>E-commerce local</strong>
+          </article>
         </div>
       </section>
 
       {error ? <p className="message error">{error}</p> : null}
 
-      <section className="panel">
+      <section className="panel reveal-up">
         <div className="section-heading">
-          <h2>Categories</h2>
+          <h2>Parcourir par categorie</h2>
           <p>{loading ? 'Chargement...' : `${categories.length} categories disponibles.`}</p>
         </div>
         <div className="chip-grid">
@@ -67,22 +90,31 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="panel">
+      <section className="panel reveal-up">
         <div className="section-heading">
-          <h2>Produits en vedette</h2>
+          <h2>Selection de la semaine</h2>
           <p>{loading ? 'Chargement...' : `${featuredProducts.length} produits mis en avant.`}</p>
         </div>
         <div className="catalog-grid">
-          {featuredProducts.map((product) => (
-            <article className="product-card" key={product.id}>
+          {featuredProducts.map((product, index) => (
+            <article className="product-card product-card-animated" key={product.id} style={{ animationDelay: `${index * 70}ms` }}>
               <div className="product-thumb">
-                {product.images?.[0]?.url ? <img src={product.images[0].url} alt={product.images[0].alt_text || product.name} /> : <span>Aucune image</span>}
+                {product.images?.[0]?.url ? (
+                  <img
+                    src={product.images[0].url}
+                    alt={product.images[0].alt_text || product.name}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span>Aucune image</span>
+                )}
               </div>
               <div className="product-card-body">
                 <strong>{product.name}</strong>
                 <p>{product.short_description || 'Produit disponible dans le catalogue.'}</p>
                 <div className="product-card-footer">
-                  <span>{product.price} XOF</span>
+                  <span>{formatPrice(product.price)} XOF</span>
                   <Link className="mini-button" to={`/products/${product.slug}`}>
                     Voir le produit
                   </Link>
@@ -90,6 +122,22 @@ function HomePage() {
               </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="panel cta-band reveal-up">
+        <div>
+          <p className="eyebrow">Besoin d aide</p>
+          <h2>Un produit en tete ? Passez commande facilement.</h2>
+          <p className="hint">Accedez au panier ou suivez directement votre commande existante.</p>
+        </div>
+        <div className="hero-actions">
+          <Link className="button primary" to="/cart">
+            Ouvrir le panier
+          </Link>
+          <Link className="button ghost" to="/track-order">
+            Suivre ma commande
+          </Link>
         </div>
       </section>
     </div>

@@ -67,22 +67,22 @@ if ($redisClient -eq 'predis') {
   }
 }
 
-if ($mediaDisk -eq 's3') {
-  $awsRequired = @('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_DEFAULT_REGION', 'AWS_BUCKET')
+if ($mediaDisk -eq 'cloudinary') {
+  $cloudinaryRequired = @('CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET')
   $missing = @()
-  foreach ($key in $awsRequired) {
+  foreach ($key in $cloudinaryRequired) {
     $value = Get-EnvValue -Key $key
     if (-not $value) { $missing += $key }
   }
 
   if ($missing.Count -eq 0) {
-    Write-Host "[OK] Variables AWS principales renseignees."
+    Write-Host "[OK] Variables Cloudinary principales renseignees."
   } else {
     $failed = $true
-    Write-Host ("[FAIL] Variables AWS manquantes: {0}" -f ($missing -join ', '))
+    Write-Host ("[FAIL] Variables Cloudinary manquantes: {0}" -f ($missing -join ', '))
   }
 } else {
-  Write-Host "[WARN] MEDIA_DISK n'est pas sur s3."
+  Write-Host "[WARN] MEDIA_DISK n'est pas sur cloudinary."
 }
 
 if ($failed) {

@@ -3,6 +3,10 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
 
+function formatPrice(value) {
+  return new Intl.NumberFormat('fr-FR').format(Number(value ?? 0))
+}
+
 function CatalogPage() {
   const { addToCart } = useShop()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -96,7 +100,7 @@ function CatalogPage() {
 
   return (
     <div className="shop-stack">
-      <section className="panel">
+      <section className="panel reveal-up">
         <div className="section-heading">
           <h2>Catalogue</h2>
           <p>{loading ? 'Chargement...' : `${pagination.total} produits trouves.`}</p>
@@ -118,37 +122,96 @@ function CatalogPage() {
               ))}
             </select>
           </div>
+          <div className="pill-row">
+            <button
+              type="button"
+              className={`filter-pill${!filters.category ? ' active' : ''}`}
+              onClick={() => updateFilter('category', '')}
+            >
+              Tous
+            </button>
+            {categories.slice(0, 8).map((category) => (
+              <button
+                key={category.id}
+                type="button"
+                className={`filter-pill${filters.category === category.slug ? ' active' : ''}`}
+                onClick={() => updateFilter('category', category.slug)}
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="catalog-grid">
-        {products.map((product) => (
-          <article className="product-card" key={product.id}>
-            <div className="product-thumb">
-              {product.images?.[0]?.url ? <img src={product.images[0].url} alt={product.images[0].alt_text || product.name} /> : <span>Aucune image</span>}
-            </div>
-            <div className="product-card-body">
-              <div>
-                <strong>{product.name}</strong>
-                <p>{product.short_description || 'Produit disponible dans le catalogue.'}</p>
+      {loading ? (
+        <section className="catalog-grid">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <article className="product-card skeleton-card" key={`skeleton-${index}`}>
+              <div className="product-thumb shimmer" />
+              <div className="product-card-body">
+                <div className="shimmer-line short" />
+                <div className="shimmer-line" />
+                <div className="shimmer-line medium" />
               </div>
-              <div className="product-card-footer split">
-                <span>{product.price} XOF</span>
+            </article>
+          ))}
+        </section>
+      ) : products.length === 0 ? (
+        <section className="panel empty-state reveal-up">
+          <h2>Aucun produit trouve</h2>
+          <p className="hint">Essayez une autre categorie ou ajustez votre recherche.</p>
+          <button className="button ghost" type="button" onClick={() => setSearchParams(new URLSearchParams())}>
+            Reinitialiser les filtres
+          </button>
+        </section>
+      ) : (
+        <section className="catalog-grid">
+          {products.map((product, index) => (
+            <article className="product-card product-card-animated" key={product.id} style={{ animationDelay: `${index * 40}ms` }}>
+              <div className="product-thumb">
+                {product.images?.[0]?.url ? (
+                  <img
+                    src={product.images[0].url}
+                    alt={product.images[0].alt_text || product.name}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span>Aucune image</span>
+                )}
+              </div>
+              <div className="product-card-body">
+                <div>
+                  <strong>{product.name}</strong>
+                  <p>{product.short_description || 'Produit disponible dans le catalogue.'}</p>
+                </div>
+                <div className="product-card-footer split">
+                  <span>{formatPrice(product.price)} XOF</span>
+                  <span className={`stock-badge ${product.stock_quantity > 0 ? 'in' : 'out'}`}>
+                    {product.stock_quantity > 0 ? `${product.stock_quantity} en stock` : 'Rupture'}
+                  </span>
+                </div>
                 <div className="table-actions">
                   <Link className="mini-button" to={`/products/${product.slug}`}>
                     Details
                   </Link>
-                  <button className="mini-button" type="button" disabled={pendingProductId === product.id} onClick={() => handleAddToCart(product.id)}>
+                  <button
+                    className="mini-button"
+                    type="button"
+                    disabled={pendingProductId === product.id || product.stock_quantity <= 0}
+                    onClick={() => handleAddToCart(product.id)}
+                  >
                     {pendingProductId === product.id ? 'Ajout...' : 'Ajouter'}
                   </button>
                 </div>
               </div>
-            </div>
-          </article>
-        ))}
-      </section>
+            </article>
+          ))}
+        </section>
+      )}
 
-      <div className="pagination-row panel">
+      <div className="pagination-row panel reveal-up">
         <button className="mini-button" type="button" disabled={pagination.current_page <= 1} onClick={() => changePage(filters.page - 1)}>
           Precedent
         </button>

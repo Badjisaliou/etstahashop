@@ -57,7 +57,16 @@ function ProductDetailPage() {
     <section className="product-detail-layout">
       <article className="panel">
         <div className="product-detail-image">
-          {product.images?.[0]?.url ? <img src={product.images[0].url} alt={product.images[0].alt_text || product.name} /> : <span>Aucune image</span>}
+          {product.images?.[0]?.url ? (
+            <img
+              src={product.images[0].url}
+              alt={product.images[0].alt_text || product.name}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span>Aucune image</span>
+          )}
         </div>
       </article>
 

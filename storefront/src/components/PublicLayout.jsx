@@ -3,6 +3,7 @@ import { useShopAuth } from '../auth'
 import { useShop } from '../shop'
 
 const ADMIN_APP_URL = import.meta.env.VITE_ADMIN_APP_URL ?? 'http://127.0.0.1:5174'
+const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
 
 function PublicLayout() {
   const { cart } = useShop()
@@ -12,8 +13,20 @@ function PublicLayout() {
   return (
     <main className="shop-shell">
       <header className="shop-header">
-        <Link className="shop-brand" to="/">
-          ETS Taha Shop
+        <Link className="shop-brand" to="/" aria-label="Accueil ETS Taha Shop">
+          <span className="brand-lockup">
+            {BRAND_LOGO_URL ? (
+              <img className="brand-logo" src={BRAND_LOGO_URL} alt="Logo ETS Taha Shop" />
+            ) : (
+              <span className="brand-mark" aria-hidden="true">
+                ET
+              </span>
+            )}
+            <span>
+              <strong className="brand-title">Etablissement Taha</strong>
+              <small className="brand-subtitle">Vente en ligne</small>
+            </span>
+          </span>
         </Link>
         <nav className="shop-nav">
           <NavLink to="/" end className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
@@ -47,7 +60,7 @@ function PublicLayout() {
               </NavLink>
             </>
           )}
-          <a className="shop-link admin" href={ADMIN_APP_URL}>
+          <a className="shop-link admin" href={ADMIN_APP_URL} target="_blank" rel="noreferrer">
             Back-office
           </a>
         </nav>
