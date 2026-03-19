@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'media_disk' => env('MEDIA_DISK', 'public'),
+    'media_disk' => env('MEDIA_DISK', 'cloudinary'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,6 +37,7 @@ return [
     | most supported storage drivers are configured here for reference.
     |
     | Supported drivers: "local", "ftp", "sftp", "s3"
+    | Cloudinary uploads are handled by the application service layer.
     |
     */
 
@@ -68,6 +69,16 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'throw' => false,
+            'report' => false,
+        ],
+
+        'cloudinary' => [
+            'driver' => 'cloudinary',
+            'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+            'api_key' => env('CLOUDINARY_API_KEY'),
+            'api_secret' => env('CLOUDINARY_API_SECRET'),
+            'secure' => true,
             'throw' => false,
             'report' => false,
         ],
