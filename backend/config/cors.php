@@ -7,6 +7,7 @@ return [
 
     'allowed_origins' => [
         'https://etstahashop.vercel.app',
+        'https://etstahashop.com',
         'https://etstahashopamin.vercel.app',
     ],
 
