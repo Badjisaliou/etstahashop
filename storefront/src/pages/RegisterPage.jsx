@@ -6,13 +6,17 @@ function RegisterPage() {
   const location = useLocation()
   const navigate = useNavigate()
   const { customer, register, authError, setAuthError } = useShopAuth()
-  const [form, setForm] = useState({ name: '', email: '', password: '', password_confirmation: '' })
+  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', password_confirmation: '' })
   const [saving, setSaving] = useState(false)
   const redirectTo = location.state?.from?.pathname ?? '/account'
 
   const formError = useMemo(() => {
-    if (!form.name.trim() || !form.email.trim() || !form.password) {
-      return 'Nom, email et mot de passe requis.'
+    if (!form.name.trim() || !form.password) {
+      return 'Nom et mot de passe requis.'
+    }
+
+    if (!form.email.trim() && !form.phone.trim()) {
+      return 'Renseignez au moins un email ou un numero de telephone.'
     }
 
     if (form.password !== form.password_confirmation) {
@@ -20,7 +24,7 @@ function RegisterPage() {
     }
 
     return ''
-  }, [form.email, form.name, form.password, form.password_confirmation])
+  }, [form.email, form.name, form.password, form.password_confirmation, form.phone])
 
   if (customer) {
     return <Navigate to={redirectTo} replace />
@@ -38,7 +42,8 @@ function RegisterPage() {
       setSaving(true)
       await register({
         name: form.name.trim(),
-        email: form.email.trim(),
+        email: form.email.trim() || undefined,
+        phone: form.phone.trim() || undefined,
         password: form.password,
         password_confirmation: form.password_confirmation,
       })
@@ -65,6 +70,10 @@ function RegisterPage() {
         <label>
           <span>Email</span>
           <input type="email" value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} />
+        </label>
+        <label>
+          <span>Telephone</span>
+          <input value={form.phone} onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))} placeholder="+221771234567" />
         </label>
         <label>
           <span>Mot de passe</span>

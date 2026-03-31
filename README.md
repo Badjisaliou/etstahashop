@@ -9,6 +9,7 @@ etstahashop/
 |- backend/      # API Laravel + logique metier e-commerce
 |- storefront/   # Boutique web React pour les clients
 |- admin/        # Back-office React pour l'administration
+|- admin-desktop/# Back-office desktop (Electron) - phase 1
 |- mobile/       # Application mobile Flutter
 |- scripts/      # Scripts locaux de demarrage, verification et arret
 ```
@@ -94,6 +95,21 @@ Dans `admin/`, copier `.env.example` vers `.env` puis utiliser :
 ```bash
 npm install
 npm run dev
+```
+
+### Admin Desktop (phase 1)
+
+Dans `admin-desktop/` :
+
+```bash
+npm install
+npm run dev
+```
+
+Pour produire un executable bureau :
+
+```bash
+npm run build
 ```
 
 ## Regles metier actuelles

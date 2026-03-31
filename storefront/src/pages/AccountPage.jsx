@@ -29,7 +29,11 @@ function AccountPage() {
       <section className="panel">
         <div className="section-heading">
           <h2>Mon compte</h2>
-          <p>{customer?.name} - {customer?.email}</p>
+          <p>
+            {customer?.name}
+            {' - '}
+            {customer?.email ?? customer?.phone ?? 'Contact non renseigne'}
+          </p>
         </div>
         <p className="message info">Retrouvez ici vos commandes associees a votre compte client.</p>
       </section>

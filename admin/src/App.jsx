@@ -6,10 +6,16 @@ import CategoriesPage from './pages/CategoriesPage'
 import ProductsPage from './pages/ProductsPage'
 import OrdersPage from './pages/OrdersPage'
 import LoginPage from './pages/LoginPage'
+import { useOrderNotifications } from './hooks/useOrderNotifications'
 
 function ProtectedRoute() {
   const location = useLocation()
-  const { admin, loadingSession } = useAdminAuth()
+  const { admin, loadingSession, token } = useAdminAuth()
+
+  useOrderNotifications({
+    token,
+    enabled: Boolean(admin) && !loadingSession,
+  })
 
   if (loadingSession) {
     return (

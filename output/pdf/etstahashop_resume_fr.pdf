@@ -1,0 +1,105 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2124 >>
+stream
+BT
+/F1 10 Tf
+14 TL
+50 802 Td
+(ETS Taha Shop - Resume de l application) Tj
+T*
+() Tj
+T*
+(Ce que c est) Tj
+T*
+(ETS Taha Shop est une application e-commerce en mono-repo.) Tj
+T*
+(Elle combine une API Laravel, deux frontends React et une app mobile Flutter.) Tj
+T*
+() Tj
+T*
+(Pour qui) Tj
+T*
+(- Clients qui naviguent, commandent et suivent leurs achats \\(storefront + mobile\\).) Tj
+T*
+(- Administrateurs qui gerent catalogue et commandes \\(back-office admin\\).) Tj
+T*
+() Tj
+T*
+(Fonctionnalites cles) Tj
+T*
+(- Authentification client \\(inscription, connexion, compte, historique des commandes\\).) Tj
+T*
+(- Catalogue public: categories, liste produits, detail produit par slug.) Tj
+T*
+(- Panier: ajout, mise a jour, suppression d article, vidage complet.) Tj
+T*
+(- Checkout + creation de commande + suivi de commande.) Tj
+T*
+(- Paiements proposes via options exposees par l API storefront.) Tj
+T*
+(- Back-office admin: gestion categories, produits et commandes.) Tj
+T*
+(- Upload d images produit cote admin avec stockage local ou Cloudinary.) Tj
+T*
+() Tj
+T*
+(Architecture \\(preuves repo\\)) Tj
+T*
+(- Composants: backend Laravel \\(backend/\\), storefront React \\(storefront/\\),) Tj
+T*
+(  admin React \\(admin/\\), mobile Flutter \\(mobile/\\).) Tj
+T*
+(- Services API: /api/storefront et /api/admin + /api/health.) Tj
+T*
+(- Flux principal: UI \\(React/Flutter\\) -> fetch HTTP -> API Laravel ->) Tj
+T*
+(  services metier -> stockage \\(disk public ou cloudinary\\) et cache Redis optionnel.) Tj
+T*
+(- Donnees exactes schema BDD detaille: Not found in repo.) Tj
+T*
+() Tj
+T*
+(Demarrage rapide \\(minimal\\)) Tj
+T*
+(1. Depuis la racine: powershell -ExecutionPolicy Bypass -File .\\\\scripts\\\\start-dev.ps1) Tj
+T*
+(2. Verifier: powershell -ExecutionPolicy Bypass -File .\\\\scripts\\\\check-local.ps1) Tj
+T*
+(3. Ouvrir: storefront http://127.0.0.1:5173 ; admin http://127.0.0.1:5174) Tj
+T*
+(4. API/health: http://127.0.0.1:8000/api/health) Tj
+T*
+() Tj
+T*
+(Sources repo: README.md, backend/routes/*.php, storefront/src/*.jsx + lib/api.js,) Tj
+T*
+(admin/src/*.jsx + lib/api.js, mobile/pubspec.yaml, scripts/start-dev.ps1.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000002417 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2487
+%%EOF

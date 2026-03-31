@@ -6,17 +6,17 @@ function LoginPage() {
   const location = useLocation()
   const navigate = useNavigate()
   const { customer, login, authError, setAuthError } = useShopAuth()
-  const [form, setForm] = useState({ email: '', password: '' })
+  const [form, setForm] = useState({ login: '', password: '' })
   const [saving, setSaving] = useState(false)
   const redirectTo = location.state?.from?.pathname ?? '/account'
 
   const formError = useMemo(() => {
-    if (!form.email.trim() || !form.password.trim()) {
-      return 'Email et mot de passe requis.'
+    if (!form.login.trim() || !form.password.trim()) {
+      return 'Email ou telephone et mot de passe requis.'
     }
 
     return ''
-  }, [form.email, form.password])
+  }, [form.login, form.password])
 
   if (customer) {
     return <Navigate to={redirectTo} replace />
@@ -33,7 +33,7 @@ function LoginPage() {
     try {
       setSaving(true)
       await login({
-        email: form.email.trim(),
+        login: form.login.trim(),
         password: form.password,
       })
       navigate(redirectTo, { replace: true })
@@ -53,8 +53,8 @@ function LoginPage() {
       {authError ? <p className="message error">{authError}</p> : null}
       <form className="form-grid" onSubmit={handleSubmit}>
         <label>
-          <span>Email</span>
-          <input type="email" value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} />
+          <span>Email ou telephone</span>
+          <input value={form.login} onChange={(event) => setForm((current) => ({ ...current, login: event.target.value }))} placeholder="+221771234567 ou client@email.com" />
         </label>
         <label>
           <span>Mot de passe</span>

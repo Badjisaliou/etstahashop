@@ -8,8 +8,10 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\Storefront\ShopAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/auth/register', [ShopAuthController::class, 'register']);
-Route::post('/auth/login', [ShopAuthController::class, 'login']);
+Route::middleware('throttle:5,1')->group(function () {
+    Route::post('/auth/register', [ShopAuthController::class, 'register']);
+    Route::post('/auth/login', [ShopAuthController::class, 'login']);
+});
 
 Route::middleware('shop.api')->group(function () {
     Route::get('/auth/me', [ShopAuthController::class, 'me']);
@@ -27,4 +29,4 @@ Route::patch('/cart/items/{cartItem}', [CartController::class, 'updateItem']);
 Route::delete('/cart/items/{cartItem}', [CartController::class, 'removeItem']);
 Route::delete('/cart', [CartController::class, 'clear']);
 Route::post('/orders', [OrderController::class, 'store']);
-Route::post('/orders/track', [OrderController::class, 'track']);
+Route::post('/orders/track', [OrderController::class, 'track'])->middleware('throttle:20,1');

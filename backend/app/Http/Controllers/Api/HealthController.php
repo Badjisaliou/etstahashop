@@ -25,6 +25,7 @@ class HealthController extends Controller
             'services' => [
                 'redis' => $this->checkRedis(),
                 'storage' => $this->checkStorage($mediaDisk),
+                'mail' => $this->checkMail(),
             ],
         ]);
     }
@@ -65,5 +66,46 @@ class HealthController extends Controller
                 'error' => $exception->getMessage(),
             ];
         }
+    }
+
+    private function checkMail(): array
+    {
+        $mailer = (string) config('mail.default', 'log');
+
+        if (in_array($mailer, ['log', 'array'], true)) {
+            return [
+                'status' => 'degraded',
+                'mailer' => $mailer,
+                'message' => 'Les emails ne sont pas envoyes reellement avec ce mailer.',
+            ];
+        }
+
+        if ($mailer === 'smtp') {
+            $host = (string) config('mail.mailers.smtp.host', '');
+            $port = (int) config('mail.mailers.smtp.port', 0);
+            $username = (string) config('mail.mailers.smtp.username', '');
+            $from = (string) config('mail.from.address', '');
+            $admin = (string) config('mail.admin_notification_address', '');
+
+            if ($host === '' || $port === 0 || $username === '' || $from === '') {
+                return [
+                    'status' => 'down',
+                    'mailer' => $mailer,
+                    'message' => 'Configuration SMTP incomplete.',
+                ];
+            }
+
+            return [
+                'status' => 'up',
+                'mailer' => $mailer,
+                'from' => $from,
+                'admin_notification_address' => $admin !== '' ? $admin : null,
+            ];
+        }
+
+        return [
+            'status' => 'up',
+            'mailer' => $mailer,
+        ];
     }
 }

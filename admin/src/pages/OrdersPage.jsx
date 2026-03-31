@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import StatusBanner from '../components/StatusBanner'
 import { useAdminAuth } from '../auth'
 import { apiRequest } from '../lib/api'
@@ -65,9 +65,23 @@ function OrdersPage() {
     loadOrders()
   }, [filters.page, filters.perPage, filters.status, filters.paymentStatus])
 
-  async function loadOrders(customFilters = filters) {
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      loadOrders(filters, { silent: true })
+    }, 15000)
+
+    return () => {
+      window.clearInterval(intervalId)
+    }
+  }, [filters, token, selectedOrderId])
+
+  const loadOrders = useCallback(async (customFilters = filters, options = {}) => {
+    const silent = options.silent ?? false
+
     try {
-      setLoading(true)
+      if (!silent) {
+        setLoading(true)
+      }
 
       const searchParams = new URLSearchParams({
         page: String(customFilters.page),
@@ -104,13 +118,19 @@ function OrdersPage() {
         }
       }
 
-      setFeedback({ text: '', tone: 'info' })
+      if (!silent) {
+        setFeedback({ text: '', tone: 'info' })
+      }
     } catch (error) {
-      setFeedback({ text: error.message, tone: 'error' })
+      if (!silent) {
+        setFeedback({ text: error.message, tone: 'error' })
+      }
     } finally {
-      setLoading(false)
+      if (!silent) {
+        setLoading(false)
+      }
     }
-  }
+  }, [filters, selectedOrderId, token])
 
   function handleSearchSubmit(event) {
     event.preventDefault()
@@ -321,6 +341,25 @@ function OrdersPage() {
                 <p>Paiement {formatPaymentMethod(selectedOrderSummary.payment_method)}</p>
                 <p>Reference {selectedOrderSummary.payment_reference ?? 'Non renseignee'}</p>
                 {selectedOrderSummary.payment_validated_at ? <p>Paiement valide le {new Date(selectedOrderSummary.payment_validated_at).toLocaleString()}</p> : null}
+              </div>
+
+              <div className="order-summary-card">
+                <strong>Contact client</strong>
+                <p>Nom: {selectedOrder?.address?.full_name ?? 'Non renseigne'}</p>
+                <p>Telephone: {selectedOrder?.address?.phone ?? 'Non renseigne'}</p>
+                <p>Email: {selectedOrder?.address?.email ?? selectedOrder?.user?.email ?? 'Non renseigne'}</p>
+              </div>
+
+              <div className="order-summary-card">
+                <strong>Adresse de livraison</strong>
+                <p>{selectedOrder?.address?.address_line_1 ?? 'Adresse principale non renseignee'}</p>
+                {selectedOrder?.address?.address_line_2 ? <p>{selectedOrder.address.address_line_2}</p> : null}
+                <p>
+                  {selectedOrder?.address?.city ?? 'Ville non renseignee'}
+                  {selectedOrder?.address?.state ? `, ${selectedOrder.address.state}` : ''}
+                </p>
+                <p>Code postal: {selectedOrder?.address?.postal_code ?? 'Non renseigne'}</p>
+                <p>Pays: {selectedOrder?.address?.country ?? 'Non renseigne'}</p>
               </div>
 
               {detailsLoading ? (

@@ -13,6 +13,7 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -48,7 +49,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'order_number' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
+            'email' => ['required', 'email:rfc,dns', 'max:255'],
         ]);
 
         $order = Order::query()
@@ -85,7 +86,7 @@ class OrderController extends Controller
             'currency' => ['nullable', 'string', 'size:3'],
             'address' => ['required', 'array'],
             'address.full_name' => ['required', 'string', 'max:255'],
-            'address.email' => ['required', 'email', 'max:255'],
+            'address.email' => ['required', 'email:rfc,dns', 'max:255'],
             'address.phone' => ['nullable', 'string', 'max:50'],
             'address.address_line_1' => ['required', 'string', 'max:255'],
             'address.address_line_2' => ['nullable', 'string', 'max:255'],
@@ -187,12 +188,16 @@ class OrderController extends Controller
             report($exception);
         }
 
-        if ($adminEmail) {
+        if ($adminEmail && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
             try {
                 Mail::to($adminEmail)->send(new NewOrderAdminMail($order, $paymentOption));
             } catch (\Throwable $exception) {
                 report($exception);
             }
+        } elseif ($adminEmail) {
+            Log::warning('MAIL_ADMIN_NOTIFICATION_ADDRESS invalide, notification admin non envoyee.', [
+                'value' => $adminEmail,
+            ]);
         }
 
         return response()->json([

@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\Admin\ProductAdminController;
 use App\Http\Controllers\Api\Admin\ProductImageUploadController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [AdminAuthController::class, 'login']);
+Route::post('/login', [AdminAuthController::class, 'login'])->middleware('throttle:5,1');
 
 Route::middleware('admin.api')->group(function () {
     Route::get('/me', [AdminAuthController::class, 'me']);
