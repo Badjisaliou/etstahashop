@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useShopAuth } from '../auth'
+import { apiRequest } from '../lib/api'
 
 function AccountPage() {
   const { customer, loadOrders } = useShopAuth()
   const [orders, setOrders] = useState([])
+  const [paymentOptions, setPaymentOptions] = useState({})
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState('')
 
   useEffect(() => {
     loadAccount()
+    loadPaymentOptions()
   }, [])
 
   async function loadAccount() {
@@ -21,6 +24,15 @@ function AccountPage() {
       setMessage(error.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function loadPaymentOptions() {
+    try {
+      const response = await apiRequest('/payment-options')
+      setPaymentOptions(response.data ?? {})
+    } catch {
+      setPaymentOptions({})
     }
   }
 
@@ -51,7 +63,7 @@ function AccountPage() {
                 <strong>{order.order_number}</strong>
                 <span className="muted-line">{order.status} - paiement {order.payment_status}</span>
                 <span className="recipient-phone-inline">
-                  Destinataire: {order.address?.phone ?? 'Numero non renseigne'}
+                  Numero de transfert boutique: {paymentOptions[order.payment_method]?.account_number ?? 'Non renseigne'}
                 </span>
               </div>
               <div className="cart-row-side">
