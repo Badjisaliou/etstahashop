@@ -9,7 +9,7 @@ function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const { admin, login, authError, setAuthError } = useAdminAuth()
-  const [form, setForm] = useState({ email: 'admin@etstaha.shop', password: 'admin12345' })
+  const [form, setForm] = useState({ email: 'admin@etstahashop.com', password: 'password123' })
   const [submitting, setSubmitting] = useState(false)
 
   if (admin) {
@@ -83,7 +83,7 @@ function LoginPage() {
             {submitting ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
-        <p className="hint">Compte seed par defaut: `admin@etstaha.shop` / `admin12345`</p>
+        <p className="hint">Compte admin par defaut: `admin@etstahashop.com` / `password123`</p>
       </section>
     </main>
   )

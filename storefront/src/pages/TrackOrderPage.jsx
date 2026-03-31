@@ -96,6 +96,10 @@ function TrackOrderPage() {
               <h2>{order.order_number}</h2>
               <p>{order.address?.full_name ?? 'Client'} - {order.address?.email ?? 'Email non disponible'}</p>
             </div>
+            <div className="recipient-phone-card">
+              <span className="recipient-phone-label">Telephone du destinataire</span>
+              <strong className="recipient-phone-value">{order.address?.phone ?? 'Non renseigne'}</strong>
+            </div>
             <div className="tracking-grid">
               <div className="check-card">
                 <strong>Statut commande</strong>

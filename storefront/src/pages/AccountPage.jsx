@@ -50,6 +50,9 @@ function AccountPage() {
               <div className="cart-row-main">
                 <strong>{order.order_number}</strong>
                 <span className="muted-line">{order.status} - paiement {order.payment_status}</span>
+                <span className="recipient-phone-inline">
+                  Destinataire: {order.address?.phone ?? 'Numero non renseigne'}
+                </span>
               </div>
               <div className="cart-row-side">
                 <strong>{order.total_amount} {order.currency}</strong>

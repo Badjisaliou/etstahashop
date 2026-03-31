@@ -133,6 +133,10 @@ function CheckoutPage() {
         <h2>{createdOrder.order_number}</h2>
         <p>Votre commande a ete enregistree avec un montant total de {createdOrder.total_amount} {createdOrder.currency}.</p>
         <p className="hint">Un email de confirmation a ete envoye a {createdOrder.address?.email ?? form.email}.</p>
+        <div className="recipient-phone-card compact">
+          <span className="recipient-phone-label">Telephone du destinataire</span>
+          <strong className="recipient-phone-value">{createdOrder.address?.phone ?? form.phone ?? 'Non renseigne'}</strong>
+        </div>
         <p className="hint">Paiement attendu par {confirmedPayment?.label ?? paymentLabel} puis validation manuelle par l administrateur.</p>
         {confirmedPayment?.account_name ? <p className="hint">Compte beneficiaire: {confirmedPayment.account_name}</p> : null}
         {confirmedPayment?.account_number ? <p className="hint">Numero de transfert: {confirmedPayment.account_number}</p> : null}
@@ -223,6 +227,10 @@ function CheckoutPage() {
         </div>
         <div className="message info">
           Paiement choisi: {paymentLabel}. Une fois la commande creee, le client effectue le transfert en dehors de l application puis attend la confirmation admin.
+        </div>
+        <div className="recipient-phone-card compact">
+          <span className="recipient-phone-label">Telephone du destinataire</span>
+          <strong className="recipient-phone-value">{form.phone.trim() || 'Renseignez le numero de livraison'}</strong>
         </div>
         {selectedPayment ? (
           <div className="order-summary-card">

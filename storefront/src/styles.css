@@ -850,6 +850,45 @@ textarea {
   background: rgba(17, 32, 59, 0.05);
 }
 
+.recipient-phone-card {
+  margin-bottom: 1rem;
+  padding: 0.95rem 1.1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(14, 58, 120, 0.22);
+  background: linear-gradient(145deg, rgba(14, 58, 120, 0.1), rgba(217, 165, 32, 0.12));
+  display: grid;
+  gap: 0.2rem;
+}
+
+.recipient-phone-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #23446d;
+}
+
+.recipient-phone-value {
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  color: #0b2c59;
+}
+
+.recipient-phone-card.compact {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.recipient-phone-card.compact .recipient-phone-value {
+  font-size: 1.05rem;
+}
+
+.recipient-phone-inline {
+  margin-top: 0.2rem;
+  font-size: 0.92rem;
+  color: #0b2c59;
+  font-weight: 600;
+}
+
 @media (max-width: 1080px) {
   .auth-layout,
   .content-grid,
