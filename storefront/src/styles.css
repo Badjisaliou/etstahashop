@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap');
+
 :root {
   --brand-blue: #0e3a78;
   --brand-blue-strong: #08244b;
@@ -10,7 +12,7 @@
     radial-gradient(circle at 18% 0%, rgba(217, 165, 32, 0.28), transparent 34%),
     radial-gradient(circle at 86% 14%, rgba(14, 58, 120, 0.2), transparent 36%),
     linear-gradient(180deg, #eef3fb 0%, var(--canvas) 56%, #f1f3f8 100%);
-  font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+  font-family: 'Manrope', 'Segoe UI', Tahoma, Verdana, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 }
@@ -56,11 +58,12 @@ img {
 .shop-header {
   display: grid;
   gap: 1rem;
-  padding: 1rem 1.2rem;
-  border-radius: 26px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(14, 58, 120, 0.12);
-  box-shadow: 0 16px 50px rgba(8, 36, 75, 0.1);
+  padding: 0.95rem 1.15rem 1.05rem;
+  border-radius: 30px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(246, 250, 255, 0.9));
+  border: 1px solid rgba(14, 58, 120, 0.14);
+  box-shadow: 0 20px 52px rgba(8, 36, 75, 0.12);
 }
 
 .shop-header-top {
@@ -68,6 +71,8 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(14, 58, 120, 0.12);
 }
 
 .shop-brand {
@@ -128,16 +133,16 @@ img {
 }
 
 .brand-title.large {
-  font-size: 1.6rem;
+  font-size: 1.75rem;
   letter-spacing: 0.03em;
 }
 
 .brand-subtitle {
   display: block;
-  margin-top: 0.1rem;
+  margin-top: 0.15rem;
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   color: var(--brand-gold);
 }
 
@@ -148,10 +153,30 @@ img {
   text-align: right;
 }
 
+.shop-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.contact-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: inline-flex;
+  color: #0b2c59;
+}
+
+.contact-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
 .shop-contact-link {
   color: #0b2c59;
   text-decoration: none;
   font-weight: 600;
+  font-size: 0.95rem;
 }
 
 .shop-contact-link:hover {
@@ -161,12 +186,14 @@ img {
 .shop-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.65rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .shop-footer {
   margin-top: 0.5rem;
-  padding: 1rem 1.2rem;
+  padding: 1.05rem 1.2rem;
   border-radius: 22px;
   border: 1px solid rgba(14, 58, 120, 0.12);
   background: rgba(255, 255, 255, 0.86);
@@ -185,12 +212,13 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
-  padding: 0.7rem 1rem;
+  min-height: 40px;
+  padding: 0.62rem 0.92rem;
   border-radius: 999px;
   color: #11203b;
   text-decoration: none;
-  background: rgba(14, 58, 120, 0.08);
+  background: rgba(14, 58, 120, 0.07);
+  border: 1px solid rgba(14, 58, 120, 0.08);
   transition: transform 180ms ease, background 180ms ease;
 }
 
@@ -237,6 +265,7 @@ img {
     radial-gradient(circle at 85% 20%, rgba(242, 193, 78, 0.28), transparent 32%),
     linear-gradient(145deg, rgba(8, 36, 75, 0.98), rgba(14, 58, 120, 0.92));
   color: #fefefe;
+  padding: 0.95rem 1.2rem;
 }
 
 .accent-panel {
@@ -267,7 +296,7 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  font-size: clamp(1.6rem, 4.2vw, 2.85rem);
   line-height: 0.95;
   max-width: 11ch;
 }
@@ -290,7 +319,7 @@ h2 {
 
 .hero-actions,
 .feature-list {
-  margin-top: 1.5rem;
+  margin-top: 1.05rem;
 }
 
 .hero-actions {
@@ -302,7 +331,7 @@ h2 {
 .hero-grid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 1.2rem;
+  gap: 0.7rem;
 }
 
 .hero-insights {
@@ -986,6 +1015,19 @@ textarea {
   .shop-contact-block,
   .shop-footer-contact {
     text-align: left;
+  }
+
+  .shop-nav {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .shop-nav .shop-link,
+  .shop-nav .button.ghost {
+    width: 100%;
+    justify-content: center;
   }
 }
 
