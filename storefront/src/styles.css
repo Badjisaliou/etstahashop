@@ -204,7 +204,8 @@ img {
   gap: 0.65rem;
   justify-content: center;
   align-items: center;
-  width: 50%;
+  width: fit-content;
+  max-width: 50%;
   margin: 0 auto;
 }
 
