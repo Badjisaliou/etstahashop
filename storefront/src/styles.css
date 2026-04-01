@@ -7,6 +7,8 @@
   --brand-gold-soft: #f2c14e;
   --ink: #11203b;
   --canvas: #f6f8fc;
+  --catalog-card-width: 250px;
+  --catalog-image-height: 188px;
   color: var(--ink);
   background:
     radial-gradient(circle at 18% 0%, rgba(217, 165, 32, 0.28), transparent 34%),
@@ -646,12 +648,12 @@ textarea {
 }
 
 .catalog-grid-fixed {
-  grid-template-columns: repeat(auto-fill, minmax(290px, 290px));
+  grid-template-columns: repeat(auto-fill, minmax(var(--catalog-card-width), var(--catalog-card-width)));
   justify-content: center;
 }
 
 .catalog-grid-fixed .product-card {
-  width: 290px;
+  width: var(--catalog-card-width);
 }
 
 .chip-grid,
@@ -803,7 +805,7 @@ textarea {
 }
 
 .product-thumb {
-  height: 220px;
+  height: var(--catalog-image-height);
   background: linear-gradient(180deg, rgba(246, 241, 232, 0.9), rgba(230, 238, 247, 0.9));
   display: flex;
   align-items: center;
@@ -870,6 +872,11 @@ textarea {
 .product-detail-copy {
   display: grid;
   gap: 1rem;
+}
+
+.back-link {
+  justify-self: start;
+  padding-inline: 0.7rem;
 }
 
 .detail-meta,
@@ -1080,5 +1087,10 @@ textarea {
 
   .brand-subtitle {
     font-size: 0.68rem;
+  }
+
+  :root {
+    --catalog-card-width: 220px;
+    --catalog-image-height: 168px;
   }
 }

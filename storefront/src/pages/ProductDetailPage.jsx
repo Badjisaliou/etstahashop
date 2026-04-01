@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
 
 function ProductDetailPage() {
   const { slug } = useParams()
+  const navigate = useNavigate()
   const { addToCart } = useShop()
   const [product, setProduct] = useState(null)
   const [quantity, setQuantity] = useState(1)
@@ -71,6 +72,9 @@ function ProductDetailPage() {
       </article>
 
       <article className="panel product-detail-copy">
+        <button className="mini-button back-link" type="button" onClick={() => navigate(-1)}>
+          ← Retour
+        </button>
         <p className="eyebrow">{product.category?.name ?? 'Catalogue'}</p>
         <h2>{product.name}</h2>
         <p className="shop-lead">{product.short_description || product.description || 'Produit disponible dans la boutique.'}</p>
