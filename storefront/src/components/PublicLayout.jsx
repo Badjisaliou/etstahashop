@@ -62,18 +62,18 @@ function PublicLayout() {
               )}
               <span>
                 <strong className="brand-title large">ETS TAHA SHOP</strong>
-                <small className="brand-subtitle">Vente en ligne - E-commerce</small>
+                <small className="brand-subtitle">Vente en ligne • E-commerce</small>
               </span>
             </span>
           </Link>
           <div className="shop-contact-block">
-            <a className="shop-contact-item" href={`mailto:${SHOP_CONTACT_EMAIL}`}>
+            <a className="shop-contact-item contact-pill" href={`mailto:${SHOP_CONTACT_EMAIL}`}>
               <span className="contact-icon"><MailIcon /></span>
               <span className="shop-contact-link">{SHOP_CONTACT_EMAIL}</span>
             </a>
-            <span className="shop-contact-item">
+            <span className="shop-contact-item contact-pill">
               <span className="contact-icon"><WhatsappIcon /></span>
-              <span className="shop-contact-link">Numero de transfert: {transferNumber}</span>
+              <span className="shop-contact-link">{transferNumber}</span>
             </span>
           </div>
         </div>
@@ -96,7 +96,7 @@ function PublicLayout() {
                 Mon compte
               </NavLink>
               <button className="button ghost" type="button" onClick={() => logout()}>
-                Deconnexion
+                Déconnexion
               </button>
             </>
           ) : (
@@ -120,13 +120,13 @@ function PublicLayout() {
           <p>Votre boutique de vente en ligne.</p>
         </div>
         <div className="shop-footer-contact">
-          <a className="shop-contact-item" href={`mailto:${SHOP_CONTACT_EMAIL}`}>
+          <a className="shop-contact-item contact-pill" href={`mailto:${SHOP_CONTACT_EMAIL}`}>
             <span className="contact-icon"><MailIcon /></span>
             <span className="shop-contact-link">{SHOP_CONTACT_EMAIL}</span>
           </a>
-          <span className="shop-contact-item">
+          <span className="shop-contact-item contact-pill">
             <span className="contact-icon"><WhatsappIcon /></span>
-            <span className="shop-contact-link">Numero de transfert: {transferNumber}</span>
+            <span className="shop-contact-link">{transferNumber}</span>
           </span>
         </div>
       </footer>
