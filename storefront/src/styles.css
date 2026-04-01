@@ -148,8 +148,10 @@ img {
 
 .shop-contact-block,
 .shop-footer-contact {
-  display: grid;
-  gap: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: nowrap;
   text-align: right;
 }
 
@@ -1024,9 +1026,6 @@ textarea {
   .shop-contact-block,
   .shop-footer-contact {
     text-align: left;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
   }
 
   .shop-nav {
@@ -1067,13 +1066,5 @@ textarea {
 
   .brand-subtitle {
     font-size: 0.68rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .shop-contact-block,
-  .shop-footer-contact {
-    display: grid;
-    gap: 0.45rem;
   }
 }
