@@ -58,12 +58,16 @@ img {
 .shop-header {
   display: grid;
   gap: 1rem;
+  position: sticky;
+  top: 0.75rem;
+  z-index: 40;
   padding: 0.95rem 1.15rem 1.05rem;
   border-radius: 30px;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(246, 250, 255, 0.9));
+    linear-gradient(145deg, rgba(255, 255, 255, 0.97), rgba(246, 250, 255, 0.94));
   border: 1px solid rgba(14, 58, 120, 0.14);
   box-shadow: 0 20px 52px rgba(8, 36, 75, 0.12);
+  backdrop-filter: blur(8px);
 }
 
 .shop-header-top {
