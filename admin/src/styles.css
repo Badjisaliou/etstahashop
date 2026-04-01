@@ -232,6 +232,16 @@ textarea {
   resize: vertical;
 }
 
+.form-grid :is(input, select, textarea):required:invalid {
+  border-color: rgba(204, 51, 51, 0.65);
+  background: rgba(255, 245, 245, 0.96);
+}
+
+.form-grid :is(input, select, textarea):required:invalid:focus {
+  outline: 2px solid rgba(204, 51, 51, 0.22);
+  outline-offset: 1px;
+}
+
 .full-span,
 .full-width {
   grid-column: 1 / -1;

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import StatusBanner from '../components/StatusBanner'
 import { useAdminAuth } from '../auth'
@@ -11,6 +11,13 @@ function LoginPage() {
   const { admin, login, authError, setAuthError } = useAdminAuth()
   const [form, setForm] = useState({ email: 'admin@etstahashop.com', password: 'password123' })
   const [submitting, setSubmitting] = useState(false)
+  const formError = useMemo(() => {
+    if (!form.email.trim() || !form.password.trim()) {
+      return 'Veuillez renseigner les champs obligatoires.'
+    }
+
+    return ''
+  }, [form.email, form.password])
 
   if (admin) {
     return <Navigate to={location.state?.from?.pathname ?? '/dashboard'} replace />
@@ -78,8 +85,8 @@ function LoginPage() {
               required
             />
           </label>
-          <StatusBanner message={authError} tone="error" />
-          <button className="button primary full-width" type="submit" disabled={submitting}>
+          <StatusBanner message={authError || formError} tone="error" />
+          <button className="button primary full-width" type="submit" disabled={submitting || Boolean(formError)}>
             {submitting ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>

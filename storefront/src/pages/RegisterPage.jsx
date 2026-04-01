@@ -61,11 +61,11 @@ function RegisterPage() {
         <h2>Inscription client</h2>
         <p>Creez un compte pour suivre vos commandes depuis la boutique.</p>
       </div>
-      {authError ? <p className="message error">{authError}</p> : null}
+      {authError || formError ? <p className="message error">{authError || formError}</p> : null}
       <form className="form-grid" onSubmit={handleSubmit}>
         <label>
           <span>Nom complet</span>
-          <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} />
+          <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} required />
         </label>
         <label>
           <span>Email</span>
@@ -77,11 +77,11 @@ function RegisterPage() {
         </label>
         <label>
           <span>Mot de passe</span>
-          <input type="password" value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} />
+          <input type="password" value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} required />
         </label>
         <label>
           <span>Confirmation</span>
-          <input type="password" value={form.password_confirmation} onChange={(event) => setForm((current) => ({ ...current, password_confirmation: event.target.value }))} />
+          <input type="password" value={form.password_confirmation} onChange={(event) => setForm((current) => ({ ...current, password_confirmation: event.target.value }))} required />
         </label>
         <div className="action-row">
           <button className="button primary" type="submit" disabled={saving || Boolean(formError)}>

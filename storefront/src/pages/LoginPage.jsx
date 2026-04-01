@@ -50,15 +50,15 @@ function LoginPage() {
         <h2>Connexion client</h2>
         <p>Connectez-vous pour retrouver vos commandes et garder votre panier relie a votre compte.</p>
       </div>
-      {authError ? <p className="message error">{authError}</p> : null}
+      {authError || formError ? <p className="message error">{authError || formError}</p> : null}
       <form className="form-grid" onSubmit={handleSubmit}>
         <label>
           <span>Email ou telephone</span>
-          <input value={form.login} onChange={(event) => setForm((current) => ({ ...current, login: event.target.value }))} placeholder="+221771234567 ou client@email.com" />
+          <input value={form.login} onChange={(event) => setForm((current) => ({ ...current, login: event.target.value }))} placeholder="+221771234567 ou client@email.com" required />
         </label>
         <label>
           <span>Mot de passe</span>
-          <input type="password" value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} />
+          <input type="password" value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} required />
         </label>
         <div className="action-row">
           <button className="button primary" type="submit" disabled={saving || Boolean(formError)}>
