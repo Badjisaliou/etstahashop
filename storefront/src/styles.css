@@ -200,13 +200,15 @@ img {
 
 .shop-nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.45rem;
   justify-content: center;
   align-items: center;
   width: fit-content;
   max-width: 32rem;
   margin: 0 auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .shop-footer {
@@ -1048,15 +1050,9 @@ textarea {
 
   .shop-nav {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-
-  .shop-nav .shop-link,
-  .shop-nav .button.ghost {
-    width: 100%;
-    justify-content: center;
+    max-width: 100%;
+    justify-content: flex-start;
+    padding-bottom: 0.2rem;
   }
 }
 
