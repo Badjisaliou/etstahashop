@@ -90,10 +90,10 @@ class OrderController extends Controller
             'address.phone' => ['nullable', 'string', 'max:50'],
             'address.address_line_1' => ['required', 'string', 'max:255'],
             'address.address_line_2' => ['nullable', 'string', 'max:255'],
-            'address.city' => ['required', 'string', 'max:120'],
+            'address.city' => ['nullable', 'string', 'max:120'],
             'address.state' => ['nullable', 'string', 'max:120'],
             'address.postal_code' => ['nullable', 'string', 'max:50'],
-            'address.country' => ['required', 'string', 'size:2'],
+            'address.country' => ['nullable', 'string', 'size:2'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'integer', 'exists:products,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
@@ -126,9 +126,15 @@ class OrderController extends Controller
                 }
             }
 
+            $normalizedAddress = [
+                ...$validated['address'],
+                'city' => $validated['address']['city'] ?? 'Non renseignee',
+                'country' => $validated['address']['country'] ?? 'SN',
+            ];
+
             $address = Address::create([
                 'user_id' => $shopUser?->id,
-                ...$validated['address'],
+                ...$normalizedAddress,
             ]);
 
             $subtotal = $groupedItems->sum(function (array $item) use ($products) {

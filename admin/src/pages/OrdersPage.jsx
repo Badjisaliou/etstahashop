@@ -217,7 +217,7 @@ function OrdersPage() {
               <input
                 value={filters.search}
                 onChange={(event) => setFilters((current) => ({ ...current, search: event.target.value }))}
-                placeholder="Rechercher par numero, client, reference ou ville"
+                placeholder="Rechercher par numero, client ou reference"
               />
               <select
                 value={filters.status}
@@ -336,7 +336,7 @@ function OrdersPage() {
             <div className="order-detail-stack">
               <div className="order-summary-card">
                 <strong>{selectedOrderSummary.order_number}</strong>
-                <p>{selectedOrderSummary.address?.full_name ?? 'Client inconnu'} | {selectedOrderSummary.address?.city ?? 'Ville inconnue'}</p>
+                <p>{selectedOrderSummary.address?.full_name ?? 'Client inconnu'}</p>
                 <p>Total {selectedOrderSummary.total_amount} {selectedOrderSummary.currency}</p>
                 <p>Paiement {formatPaymentMethod(selectedOrderSummary.payment_method)}</p>
                 <p>Reference {selectedOrderSummary.payment_reference ?? 'Non renseignee'}</p>
@@ -354,12 +354,6 @@ function OrdersPage() {
                 <strong>Adresse de livraison</strong>
                 <p>{selectedOrder?.address?.address_line_1 ?? 'Adresse principale non renseignee'}</p>
                 {selectedOrder?.address?.address_line_2 ? <p>{selectedOrder.address.address_line_2}</p> : null}
-                <p>
-                  {selectedOrder?.address?.city ?? 'Ville non renseignee'}
-                  {selectedOrder?.address?.state ? `, ${selectedOrder.address.state}` : ''}
-                </p>
-                <p>Code postal: {selectedOrder?.address?.postal_code ?? 'Non renseigne'}</p>
-                <p>Pays: {selectedOrder?.address?.country ?? 'Non renseigne'}</p>
               </div>
 
               {detailsLoading ? (

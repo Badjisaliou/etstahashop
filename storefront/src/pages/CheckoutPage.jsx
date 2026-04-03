@@ -10,10 +10,6 @@ const initialForm = {
   phone: '',
   address_line_1: '',
   address_line_2: '',
-  city: '',
-  state: '',
-  postal_code: '',
-  country: 'SN',
   payment_method: 'wave',
   payment_reference: '',
   notes: '',
@@ -49,12 +45,12 @@ function CheckoutPage() {
       return 'Le panier est vide.'
     }
 
-    if (!form.full_name.trim() || !form.email.trim() || !form.address_line_1.trim() || !form.city.trim() || !form.country.trim()) {
+    if (!form.full_name.trim() || !form.email.trim() || !form.address_line_1.trim()) {
       return 'Merci de remplir les informations client et de livraison obligatoires.'
     }
 
     return ''
-  }, [cart, form.address_line_1, form.city, form.country, form.email, form.full_name])
+  }, [cart, form.address_line_1, form.email, form.full_name])
 
   async function loadPaymentOptions() {
     try {
@@ -87,10 +83,10 @@ function CheckoutPage() {
             phone: form.phone || null,
             address_line_1: form.address_line_1,
             address_line_2: form.address_line_2 || null,
-            city: form.city,
-            state: form.state || null,
-            postal_code: form.postal_code || null,
-            country: form.country,
+            city: 'Non renseignee',
+            state: null,
+            postal_code: null,
+            country: 'SN',
           },
           items: cart.items.map((item) => ({
             product_id: item.product_id,
@@ -180,22 +176,6 @@ function CheckoutPage() {
           <label className="full-span">
             <span>Complement d adresse</span>
             <input value={form.address_line_2} onChange={(event) => setForm((current) => ({ ...current, address_line_2: event.target.value }))} />
-          </label>
-          <label>
-            <span>Ville</span>
-            <input value={form.city} onChange={(event) => setForm((current) => ({ ...current, city: event.target.value }))} />
-          </label>
-          <label>
-            <span>Region / Etat</span>
-            <input value={form.state} onChange={(event) => setForm((current) => ({ ...current, state: event.target.value }))} />
-          </label>
-          <label>
-            <span>Code postal</span>
-            <input value={form.postal_code} onChange={(event) => setForm((current) => ({ ...current, postal_code: event.target.value }))} />
-          </label>
-          <label>
-            <span>Pays (code ISO 2)</span>
-            <input value={form.country} maxLength="2" onChange={(event) => setForm((current) => ({ ...current, country: event.target.value.toUpperCase() }))} />
           </label>
           <label>
             <span>Methode de paiement</span>
