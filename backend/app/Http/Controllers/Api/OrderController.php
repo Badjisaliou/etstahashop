@@ -10,6 +10,7 @@ use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\WhatsAppNotifier;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class OrderController extends Controller
 {
     use ResolvesShopApiUser;
+
+    public function __construct(
+        private readonly WhatsAppNotifier $whatsAppNotifier
+    ) {
+    }
 
     public function index(Request $request): JsonResponse
     {
@@ -204,6 +210,12 @@ class OrderController extends Controller
             Log::warning('MAIL_ADMIN_NOTIFICATION_ADDRESS invalide, notification admin non envoyee.', [
                 'value' => $adminEmail,
             ]);
+        }
+
+        try {
+            $this->whatsAppNotifier->sendNewOrderToAdmin($order, $paymentOption);
+        } catch (\Throwable $exception) {
+            report($exception);
         }
 
         return response()->json([

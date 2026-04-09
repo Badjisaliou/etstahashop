@@ -42,4 +42,21 @@ return [
         'folder' => env('CLOUDINARY_FOLDER', 'products/uploads'),
     ],
 
+    'whatsapp' => [
+        'enabled' => env('WHATSAPP_ENABLED', false),
+        'provider' => env('WHATSAPP_PROVIDER', 'meta'),
+        'admin_number' => env('WHATSAPP_ADMIN_NUMBER'),
+        'timeout_seconds' => env('WHATSAPP_TIMEOUT_SECONDS', 10),
+        'meta' => [
+            'api_version' => env('WHATSAPP_API_VERSION', 'v21.0'),
+            'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+            'access_token' => env('WHATSAPP_ACCESS_TOKEN'),
+        ],
+        'twilio' => [
+            'account_sid' => env('TWILIO_ACCOUNT_SID'),
+            'auth_token' => env('TWILIO_AUTH_TOKEN'),
+            'from_number' => env('TWILIO_WHATSAPP_FROM'),
+        ],
+    ],
+
 ];

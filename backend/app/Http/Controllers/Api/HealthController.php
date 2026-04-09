@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\CloudinaryUploader;
+use App\Services\WhatsAppNotifier;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +13,8 @@ use Throwable;
 class HealthController extends Controller
 {
     public function __construct(
-        private readonly CloudinaryUploader $cloudinaryUploader
+        private readonly CloudinaryUploader $cloudinaryUploader,
+        private readonly WhatsAppNotifier $whatsAppNotifier
     ) {
     }
 
@@ -26,6 +28,7 @@ class HealthController extends Controller
                 'redis' => $this->checkRedis(),
                 'storage' => $this->checkStorage($mediaDisk),
                 'mail' => $this->checkMail(),
+                'whatsapp' => $this->whatsAppNotifier->status(),
             ],
         ]);
     }
