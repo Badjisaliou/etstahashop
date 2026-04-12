@@ -6,7 +6,7 @@ import { useShop } from '../shop'
 
 const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
 const SHOP_CONTACT_EMAIL = 'etstahashop@gmail.com'
-const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 77 000 00 00'
+const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 70 529 89 00'
 
 function MailIcon() {
   return (
@@ -49,8 +49,12 @@ function PublicLayout() {
 
   const whatsappLink = useMemo(() => {
   const cleanNumber = SHOP_CONTACT_PHONE.replace(/\D/g, '')
-  return `https://wa.me/${cleanNumber}`
-  }, [])
+  const message = encodeURIComponent(
+    "Bonjour ETS TAHA SHOP, je souhaite avoir plus d'informations sur vos produits."
+  )
+
+  return `https://wa.me/${cleanNumber}?text=${message}`
+}, [])
 
   return (
     <main className="shop-shell">
