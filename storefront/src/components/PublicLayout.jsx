@@ -47,6 +47,11 @@ function PublicLayout() {
     return paymentOptions?.wave?.account_number ?? paymentOptions?.orange_money?.account_number ?? SHOP_CONTACT_PHONE
   }, [paymentOptions])
 
+  const whatsappLink = useMemo(() => {
+  const cleanNumber = SHOP_CONTACT_PHONE.replace(/\D/g, '')
+  return `https://wa.me/${cleanNumber}`
+  }, [])
+
   return (
     <main className="shop-shell">
       <header className="shop-header">
@@ -71,10 +76,14 @@ function PublicLayout() {
               <span className="contact-icon"><MailIcon /></span>
               <span className="shop-contact-link">{SHOP_CONTACT_EMAIL}</span>
             </a>
-            <span className="shop-contact-item contact-pill">
-              <span className="contact-icon"><WhatsappIcon /></span>
-              <span className="shop-contact-link">{transferNumber}</span>
-            </span>
+            <a className="shop-contact-item contact-pill"
+               href={whatsappLink}
+               target="_blank"
+               rel="noopener noreferrer"
+      >
+            <span className="contact-icon"><WhatsappIcon /></span>
+             <span className="shop-contact-link">{SHOP_CONTACT_PHONE}</span>
+            </a>
           </div>
         </div>
         <nav className="shop-nav">
