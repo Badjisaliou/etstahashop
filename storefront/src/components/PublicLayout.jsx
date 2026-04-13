@@ -6,7 +6,7 @@ import { useShop } from '../shop'
 
 const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
 const SHOP_CONTACT_EMAIL = 'etstahashop@gmail.com'
-const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 70 529 89 00'
+const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 76 990 94 66'
 
 function MailIcon() {
   return (
