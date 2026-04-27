@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { apiRequest } from './lib/api'
+import { safeStorageGet, safeStorageRemove, safeStorageSet } from './lib/safeStorage'
 
 const TOKEN_STORAGE_KEY = 'ets_shop_token'
 const ShopAuthContext = createContext(null)
 
 export function ShopAuthProvider({ children }) {
-  const [token, setToken] = useState(() => window.localStorage.getItem(TOKEN_STORAGE_KEY) ?? '')
+  const [token, setToken] = useState(() => safeStorageGet(TOKEN_STORAGE_KEY, ''))
   const [customer, setCustomer] = useState(null)
   const [loadingSession, setLoadingSession] = useState(Boolean(token))
   const [authError, setAuthError] = useState('')
@@ -66,13 +67,13 @@ export function ShopAuthProvider({ children }) {
       }
     }
 
-    window.localStorage.removeItem(TOKEN_STORAGE_KEY)
+    safeStorageRemove(TOKEN_STORAGE_KEY)
     setToken('')
     setCustomer(null)
   }
 
   function persistSession(data) {
-    window.localStorage.setItem(TOKEN_STORAGE_KEY, data.token)
+    safeStorageSet(TOKEN_STORAGE_KEY, data.token)
     setToken(data.token)
     setCustomer(data.user)
     setAuthError('')

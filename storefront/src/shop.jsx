@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useShopAuth } from './auth'
 import { apiRequest } from './lib/api'
+import { safeStorageGet, safeStorageSet } from './lib/safeStorage'
 
 const SESSION_STORAGE_KEY = 'ets_shop_session_id'
 const ShopContext = createContext(null)
@@ -16,14 +17,14 @@ function createSessionId() {
 export function ShopProvider({ children }) {
   const { token } = useShopAuth()
   const [sessionId] = useState(() => {
-    const existing = window.localStorage.getItem(SESSION_STORAGE_KEY)
+    const existing = safeStorageGet(SESSION_STORAGE_KEY, '')
 
     if (existing) {
       return existing
     }
 
     const next = createSessionId()
-    window.localStorage.setItem(SESSION_STORAGE_KEY, next)
+    safeStorageSet(SESSION_STORAGE_KEY, next)
     return next
   })
   const [cart, setCart] = useState(null)
