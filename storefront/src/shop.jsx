@@ -31,7 +31,9 @@ export function ShopProvider({ children }) {
   const [cartError, setCartError] = useState('')
 
   useEffect(() => {
-    hydrateCart(sessionId)
+    hydrateCart(sessionId).catch(() => {
+      // We keep the app visible even if cart hydration fails.
+    })
   }, [sessionId, token])
 
   async function hydrateCart(currentSessionId = sessionId) {
@@ -43,7 +45,7 @@ export function ShopProvider({ children }) {
       return response.data
     } catch (error) {
       setCartError(error.message)
-      throw error
+      return null
     } finally {
       setCartLoading(false)
     }
