@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useShopAuth } from '../auth'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
@@ -25,13 +25,30 @@ function WhatsappIcon() {
 }
 
 function PublicLayout() {
+  const location = useLocation()
   const { cart } = useShop()
   const { customer, logout } = useShopAuth()
   const itemsCount = cart?.items_count ?? 0
   const [paymentOptions, setPaymentOptions] = useState({})
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     loadPaymentOptions()
+  }, [])
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth > 720) {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   async function loadPaymentOptions() {
@@ -90,7 +107,16 @@ function PublicLayout() {
             </a>
           </div>
         </div>
-        <nav className="shop-nav">
+        <button
+          className="shop-nav-toggle"
+          type="button"
+          aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={mobileMenuOpen}
+          onClick={() => setMobileMenuOpen((current) => !current)}
+        >
+          {mobileMenuOpen ? 'Fermer' : 'Menu'}
+        </button>
+        <nav className={`shop-nav${mobileMenuOpen ? ' open' : ''}`}>
           <NavLink to="/" end className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
             Accueil
           </NavLink>
@@ -108,7 +134,7 @@ function PublicLayout() {
               <NavLink to="/account" className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
                 Mon compte
               </NavLink>
-              <button className="button ghost" type="button" onClick={() => logout()}>
+              <button className="button ghost" type="button" onClick={() => { logout(); setMobileMenuOpen(false) }}>
                 Déconnexion
               </button>
             </>

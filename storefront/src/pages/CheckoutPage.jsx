@@ -192,7 +192,7 @@ function CheckoutPage() {
             <span>Notes</span>
             <textarea rows="4" value={form.notes} onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))} />
           </label>
-          <div className="action-row">
+          <div className="action-row checkout-submit-row">
             <button className="button primary" type="submit" disabled={saving || Boolean(formError)}>
               {saving ? 'Validation...' : 'Creer la commande'}
             </button>
@@ -200,7 +200,7 @@ function CheckoutPage() {
         </form>
       </article>
 
-      <article className="panel">
+      <article className="panel checkout-summary-panel">
         <div className="section-heading">
           <h2>Recapitulatif</h2>
           <p>{cart.items_count} articles dans la commande.</p>

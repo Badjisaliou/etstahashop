@@ -73,7 +73,7 @@ function ProductDetailPage() {
 
       <article className="panel product-detail-copy">
         <button className="mini-button back-link" type="button" onClick={() => navigate(-1)}>
-          ← Retour
+          Retour
         </button>
         <p className="eyebrow">{product.category?.name ?? 'Catalogue'}</p>
         <h2>{product.name}</h2>
@@ -85,7 +85,7 @@ function ProductDetailPage() {
           <span>SKU: {product.sku}</span>
         </div>
         {message ? <p className={`message ${message.includes('succes') ? 'success' : 'error'}`}>{message}</p> : null}
-        <div className="filter-row">
+        <div className="filter-row product-detail-actions">
           <input type="number" min="1" max={product.stock_quantity || 1} value={quantity} onChange={(event) => setQuantity(Number(event.target.value) || 1)} />
           <button className="button primary" type="button" disabled={adding || product.stock_quantity <= 0} onClick={handleAddToCart}>
             {adding ? 'Ajout...' : product.stock_quantity > 0 ? 'Ajouter au panier' : 'Rupture de stock'}
@@ -100,3 +100,4 @@ function ProductDetailPage() {
 }
 
 export default ProductDetailPage
+
