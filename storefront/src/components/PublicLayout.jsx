@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useShopAuth } from '../auth'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
@@ -26,11 +26,13 @@ function WhatsappIcon() {
 
 function PublicLayout() {
   const location = useLocation()
+  const navigate = useNavigate()
   const { cart } = useShop()
   const { customer, logout } = useShopAuth()
   const itemsCount = cart?.items_count ?? 0
   const [paymentOptions, setPaymentOptions] = useState({})
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     loadPaymentOptions()
@@ -73,9 +75,27 @@ function PublicLayout() {
   return `https://wa.me/${cleanNumber}?text=${message}`
 }, [])
 
+  function handleSearch(event) {
+    event.preventDefault()
+    const params = new URLSearchParams()
+
+    if (searchTerm.trim()) {
+      params.set('search', searchTerm.trim())
+    }
+
+    navigate(`/catalogue${params.toString() ? `?${params.toString()}` : ''}`)
+  }
+
   return (
     <main className="shop-shell">
       <header className="shop-header">
+        <div className="market-topbar">
+          <Link to="/track-order">Suivre une commande</Link>
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+            Assistance WhatsApp
+          </a>
+          <a href={`mailto:${SHOP_CONTACT_EMAIL}`}>Vendre avec ETS Taha</a>
+        </div>
         <div className="shop-header-top">
           <Link className="shop-brand" to="/" aria-label="Accueil ETS Taha Shop">
             <span className="brand-lockup prominent">
@@ -92,19 +112,30 @@ function PublicLayout() {
               </span>
             </span>
           </Link>
+          <form className="market-search" onSubmit={handleSearch}>
+            <input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Cherchez un produit, une marque ou une categorie"
+              aria-label="Rechercher un produit"
+            />
+            <button className="button primary search-button" type="submit">
+              Rechercher
+            </button>
+          </form>
           <div className="shop-contact-block">
-            <a className="shop-contact-item contact-pill" href={`mailto:${SHOP_CONTACT_EMAIL}`}>
-              <span className="contact-icon"><MailIcon /></span>
-              <span className="shop-contact-link">{SHOP_CONTACT_EMAIL}</span>
+            <NavLink to={customer ? '/account' : '/login'} className="quick-action">
+              <span>Compte</span>
+              <strong>{customer ? 'Mon espace' : 'Connexion'}</strong>
+            </NavLink>
+            <a className="quick-action" href={whatsappLink} target="_blank" rel="noopener noreferrer">
+              <span>Aide</span>
+              <strong>{SHOP_CONTACT_PHONE}</strong>
             </a>
-            <a className="shop-contact-item contact-pill"
-               href={whatsappLink}
-               target="_blank"
-               rel="noopener noreferrer"
-      >
-            <span className="contact-icon"><WhatsappIcon /></span>
-             <span className="shop-contact-link">{SHOP_CONTACT_PHONE}</span>
-            </a>
+            <NavLink to="/cart" className="quick-action cart-action">
+              <span>Panier</span>
+              <strong>{itemsCount} article{itemsCount > 1 ? 's' : ''}</strong>
+            </NavLink>
           </div>
         </div>
         <button

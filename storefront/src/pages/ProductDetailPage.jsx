@@ -3,6 +3,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
 
+function formatPrice(value) {
+  return new Intl.NumberFormat('fr-FR').format(Number(value ?? 0))
+}
+
 function ProductDetailPage() {
   const { slug } = useParams()
   const navigate = useNavigate()
@@ -55,47 +59,67 @@ function ProductDetailPage() {
   }
 
   return (
-    <section className="product-detail-layout">
-      <article className="panel">
-        <div className="product-detail-image">
-          {product.images?.[0]?.url ? (
-            <img
-              src={product.images[0].url}
-              alt={product.images[0].alt_text || product.name}
-              loading="lazy"
-              decoding="async"
-            />
-          ) : (
-            <span>Aucune image</span>
-          )}
-        </div>
-      </article>
+    <div className="product-market-page">
+      <button className="mini-button back-link" type="button" onClick={() => navigate(-1)}>
+        Retour
+      </button>
 
-      <article className="panel product-detail-copy">
-        <button className="mini-button back-link" type="button" onClick={() => navigate(-1)}>
-          Retour
-        </button>
-        <p className="eyebrow">{product.category?.name ?? 'Catalogue'}</p>
-        <h2>{product.name}</h2>
-        <p className="shop-lead">{product.short_description || product.description || 'Produit disponible dans la boutique.'}</p>
-        <p>{product.description}</p>
-        <div className="detail-meta">
-          <strong>{product.price} XOF</strong>
-          <span>Stock disponible: {product.stock_quantity}</span>
-          <span>SKU: {product.sku}</span>
-        </div>
-        {message ? <p className={`message ${message.includes('succes') ? 'success' : 'error'}`}>{message}</p> : null}
-        <div className="filter-row product-detail-actions">
-          <input type="number" min="1" max={product.stock_quantity || 1} value={quantity} onChange={(event) => setQuantity(Number(event.target.value) || 1)} />
+      <section className="product-market-layout">
+        <article className="product-gallery-panel">
+          <div className="product-detail-image">
+            {product.images?.[0]?.url ? (
+              <img
+                src={product.images[0].url}
+                alt={product.images[0].alt_text || product.name}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span>Aucune image</span>
+            )}
+          </div>
+        </article>
+
+        <article className="product-main-panel">
+          <p className="product-category-label">{product.category?.name ?? 'Catalogue'}</p>
+          <h2>{product.name}</h2>
+          <p className="product-summary">{product.short_description || 'Produit disponible dans la boutique.'}</p>
+          <div className="product-price-block">
+            <strong>{formatPrice(product.price)} XOF</strong>
+            <span className={`stock-badge ${product.stock_quantity > 0 ? 'in' : 'out'}`}>
+              {product.stock_quantity > 0 ? `${product.stock_quantity} en stock` : 'Rupture de stock'}
+            </span>
+          </div>
+          <div className="product-description-block">
+            <h3>Description</h3>
+            <p>{product.description || product.short_description || 'Plus de details seront disponibles prochainement.'}</p>
+          </div>
+          <div className="detail-meta">
+            <span>SKU: {product.sku || 'Non renseigne'}</span>
+          </div>
+          {message ? <p className={`message ${message.includes('succes') ? 'success' : 'error'}`}>{message}</p> : null}
+        </article>
+
+        <aside className="buy-box">
+          <strong>Commander ce produit</strong>
+          <label>
+            <span>Quantite</span>
+            <input type="number" min="1" max={product.stock_quantity || 1} value={quantity} onChange={(event) => setQuantity(Number(event.target.value) || 1)} />
+          </label>
           <button className="button primary" type="button" disabled={adding || product.stock_quantity <= 0} onClick={handleAddToCart}>
             {adding ? 'Ajout...' : product.stock_quantity > 0 ? 'Ajouter au panier' : 'Rupture de stock'}
           </button>
           <Link className="button ghost" to="/cart">
             Voir le panier
           </Link>
-        </div>
-      </article>
-    </section>
+          <div className="buy-box-services">
+            <span>Livraison suivie</span>
+            <span>Paiement confirme manuellement</span>
+            <span>Support local WhatsApp</span>
+          </div>
+        </aside>
+      </section>
+    </div>
   )
 }
 
