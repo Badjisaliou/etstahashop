@@ -7,7 +7,40 @@ function formatPrice(value) {
   return new Intl.NumberFormat('fr-FR').format(Number(value ?? 0))
 }
 
+function getDiscountPercent(product) {
+  const price = Number(product.price ?? 0)
+  const comparePrice = Number(product.compare_price ?? 0)
+
+  if (!comparePrice || comparePrice <= price || !price) {
+    return 0
+  }
+
+  return Math.round(((comparePrice - price) / comparePrice) * 100)
+}
+
+function getProductBadges(product) {
+  const badges = []
+  const discount = getDiscountPercent(product)
+
+  if (discount > 0) {
+    badges.push(`-${discount}%`)
+  }
+
+  if (product.is_featured) {
+    badges.push('Offre')
+  }
+
+  if (Number(product.stock_quantity ?? 0) <= 0) {
+    badges.push('Rupture')
+  } else if (Number(product.stock_quantity ?? 0) <= 3) {
+    badges.push('Stock limite')
+  }
+
+  return badges.slice(0, 2)
+}
+
 function CatalogPage() {
+  const productsPerPage = 24
   const { addToCart } = useShop()
   const [searchParams, setSearchParams] = useSearchParams()
   const [categories, setCategories] = useState([])
@@ -21,28 +54,45 @@ function CatalogPage() {
     () => ({
       search: searchParams.get('search') ?? '',
       category: searchParams.get('category') ?? '',
+      sort: searchParams.get('sort') ?? 'latest',
+      inStock: searchParams.get('in_stock') === '1',
       page: Number(searchParams.get('page') ?? '1'),
     }),
     [searchParams],
   )
+  const isCategoryIndex = !filters.category && !filters.search.trim()
+  const selectedCategory = categories.find((category) => category.slug === filters.category)
 
   useEffect(() => {
     loadCatalog()
-  }, [filters.search, filters.category, filters.page])
+  }, [filters.search, filters.category, filters.sort, filters.inStock, filters.page])
 
   useEffect(() => {
     loadCategories()
   }, [])
 
   async function loadCategories() {
-    const response = await apiRequest('/categories')
-    setCategories(response.data ?? [])
+    try {
+      const response = await apiRequest('/categories')
+      setCategories(response.data ?? [])
+    } catch (error) {
+      setMessage(error.message)
+      setCategories([])
+    }
   }
 
   async function loadCatalog() {
+    if (isCategoryIndex) {
+      setProducts([])
+      setPagination({ current_page: 1, last_page: 1, total: 0 })
+      setMessage('')
+      setLoading(false)
+      return
+    }
+
     try {
       setLoading(true)
-      const params = new URLSearchParams({ page: String(filters.page) })
+      const params = new URLSearchParams({ page: String(filters.page), per_page: String(productsPerPage) })
 
       if (filters.search.trim()) {
         params.set('search', filters.search.trim())
@@ -50,6 +100,14 @@ function CatalogPage() {
 
       if (filters.category) {
         params.set('category', filters.category)
+      }
+
+      if (filters.sort && filters.sort !== 'latest') {
+        params.set('sort', filters.sort)
+      }
+
+      if (filters.inStock) {
+        params.set('in_stock', '1')
       }
 
       const response = await apiRequest(`/products?${params.toString()}`)
@@ -80,6 +138,19 @@ function CatalogPage() {
     setSearchParams(next)
   }
 
+  function toggleInStock() {
+    const next = new URLSearchParams(searchParams)
+
+    if (filters.inStock) {
+      next.delete('in_stock')
+    } else {
+      next.set('in_stock', '1')
+    }
+
+    next.set('page', '1')
+    setSearchParams(next)
+  }
+
   function changePage(page) {
     const next = new URLSearchParams(searchParams)
     next.set('page', String(page))
@@ -96,6 +167,28 @@ function CatalogPage() {
     } finally {
       setPendingProductId(null)
     }
+  }
+
+  if (isCategoryIndex) {
+    return (
+      <div className="categories-page">
+        <section className="market-section reveal-up">
+          <div className="market-section-heading">
+            <h2>Categories</h2>
+            <span>{categories.length} categories disponibles</span>
+          </div>
+          {message ? <p className="message error">{message}</p> : null}
+          <div className="category-directory">
+            {categories.map((category) => (
+              <Link key={category.id} className="category-card-large" to={`/catalogue?category=${category.slug}`}>
+                <strong>{category.name}</strong>
+                <span>{category.products_count} produits</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
+    )
   }
 
   return (
@@ -133,7 +226,7 @@ function CatalogPage() {
         <section className="market-section reveal-up">
           <div className="catalog-toolbar">
             <div>
-              <h2>Catalogue</h2>
+              <h2>{selectedCategory?.name ?? 'Catalogue'}</h2>
               <p>{loading ? 'Chargement...' : `${pagination.total} produits trouves.`}</p>
             </div>
             <div className="catalog-search-row">
@@ -150,6 +243,19 @@ function CatalogPage() {
                   </option>
                 ))}
               </select>
+              <select value={filters.sort} onChange={(event) => updateFilter('sort', event.target.value)}>
+                <option value="latest">Plus recents</option>
+                <option value="featured">Produits vedettes</option>
+                <option value="price_asc">Prix croissant</option>
+                <option value="price_desc">Prix decroissant</option>
+              </select>
+              <button
+                className={`filter-pill stock-toggle${filters.inStock ? ' active' : ''}`}
+                type="button"
+                onClick={toggleInStock}
+              >
+                En stock
+              </button>
             </div>
           </div>
           {message ? <p className={`message ${message.includes('succes') ? 'success' : 'error'}`}>{message}</p> : null}
@@ -181,6 +287,13 @@ function CatalogPage() {
             {products.map((product, index) => (
               <article className="product-card product-card-animated" key={product.id} style={{ animationDelay: `${index * 40}ms` }}>
                 <div className="product-thumb">
+                  {getProductBadges(product).length > 0 ? (
+                    <div className="product-badges">
+                      {getProductBadges(product).map((badge) => (
+                        <span key={badge} className={badge === 'Rupture' ? 'danger' : ''}>{badge}</span>
+                      ))}
+                    </div>
+                  ) : null}
                   {product.images?.[0]?.url ? (
                     <img
                       src={product.images[0].url}
@@ -195,8 +308,11 @@ function CatalogPage() {
                 <div className="product-card-body">
                   <strong>{product.name}</strong>
                   <p>{product.short_description || 'Produit disponible dans le catalogue.'}</p>
-                  <div className="product-card-footer split">
+                  <div className="product-price-stack">
                     <span>{formatPrice(product.price)} XOF</span>
+                    {getDiscountPercent(product) > 0 ? <del>{formatPrice(product.compare_price)} XOF</del> : null}
+                  </div>
+                  <div className="product-card-footer split">
                     <span className={`stock-badge ${product.stock_quantity > 0 ? 'in' : 'out'}`}>
                       {product.stock_quantity > 0 ? 'En stock' : 'Rupture'}
                     </span>

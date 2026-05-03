@@ -13,10 +13,13 @@ class ProductController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+        $perPage = min(max($request->integer('per_page', 24), 1), 60);
+        $sort = $request->string('sort')->toString();
+
         $products = Cache::remember(
             CatalogCache::productsIndexKey($request),
             CatalogCache::ttl(),
-            function () use ($request) {
+            function () use ($request, $perPage, $sort) {
                 return Product::query()
                     ->with(['category', 'images'])
                     ->where('is_active', true)
@@ -28,6 +31,9 @@ class ProductController extends Controller
                     ->when($request->boolean('featured'), function ($query) {
                         $query->where('is_featured', true);
                     })
+                    ->when($request->boolean('in_stock'), function ($query) {
+                        $query->where('stock_quantity', '>', 0);
+                    })
                     ->when($request->filled('search'), function ($query) use ($request) {
                         $term = '%' . $request->string('search') . '%';
                         $query->where(function ($builder) use ($term) {
@@ -37,8 +43,11 @@ class ProductController extends Controller
                                 ->orWhere('short_description', 'like', $term);
                         });
                     })
-                    ->latest()
-                    ->paginate(12)
+                    ->when($sort === 'price_asc', fn ($query) => $query->orderBy('price'))
+                    ->when($sort === 'price_desc', fn ($query) => $query->orderByDesc('price'))
+                    ->when($sort === 'featured', fn ($query) => $query->orderByDesc('is_featured')->latest())
+                    ->when(! in_array($sort, ['price_asc', 'price_desc', 'featured'], true), fn ($query) => $query->latest())
+                    ->paginate($perPage)
                     ->withQueryString()
                     ->toArray();
             }

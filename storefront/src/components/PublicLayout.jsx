@@ -33,6 +33,8 @@ function PublicLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [categories, setCategories] = useState([])
+  const [searchSuggestions, setSearchSuggestions] = useState([])
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false)
 
   useEffect(() => {
     loadCategories()
@@ -40,7 +42,23 @@ function PublicLayout() {
 
   useEffect(() => {
     setMobileMenuOpen(false)
+    setSuggestionsOpen(false)
   }, [location.pathname])
+
+  useEffect(() => {
+    const term = searchTerm.trim()
+
+    if (term.length < 2) {
+      setSearchSuggestions([])
+      return undefined
+    }
+
+    const timer = window.setTimeout(() => {
+      loadSearchSuggestions(term)
+    }, 240)
+
+    return () => window.clearTimeout(timer)
+  }, [searchTerm])
 
   useEffect(() => {
     function handleResize() {
@@ -71,6 +89,16 @@ function PublicLayout() {
     }
   }
 
+  async function loadSearchSuggestions(term) {
+    try {
+      const response = await apiRequest(`/products?search=${encodeURIComponent(term)}&per_page=5`)
+      setSearchSuggestions(response.data ?? [])
+      setSuggestionsOpen(true)
+    } catch {
+      setSearchSuggestions([])
+    }
+  }
+
   function handleSearch(event) {
     event.preventDefault()
     const params = new URLSearchParams()
@@ -79,8 +107,21 @@ function PublicLayout() {
       params.set('search', searchTerm.trim())
     }
 
+    setSuggestionsOpen(false)
     navigate(`/catalogue${params.toString() ? `?${params.toString()}` : ''}`)
   }
+
+  function goToSuggestion(path) {
+    setSuggestionsOpen(false)
+    setSearchTerm('')
+    navigate(path)
+  }
+
+  const matchingCategories = searchTerm.trim().length >= 2
+    ? categories
+      .filter((category) => category.name.toLowerCase().includes(searchTerm.trim().toLowerCase()))
+      .slice(0, 4)
+    : []
 
   return (
     <main className="shop-shell">
@@ -105,12 +146,48 @@ function PublicLayout() {
             <input
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
+              onFocus={() => setSuggestionsOpen(searchTerm.trim().length >= 2)}
               placeholder="Cherchez un produit, une marque ou une categorie"
               aria-label="Rechercher un produit"
             />
             <button className="button primary search-button" type="submit">
               Rechercher
             </button>
+            {suggestionsOpen && (searchSuggestions.length > 0 || matchingCategories.length > 0) ? (
+              <div className="search-suggestions">
+                {matchingCategories.length > 0 ? (
+                  <div className="suggestion-group">
+                    <strong>Categories</strong>
+                    {matchingCategories.map((category) => (
+                      <button
+                        key={category.id}
+                        type="button"
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => goToSuggestion(`/catalogue?category=${category.slug}`)}
+                      >
+                        {category.name}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+                {searchSuggestions.length > 0 ? (
+                  <div className="suggestion-group">
+                    <strong>Produits</strong>
+                    {searchSuggestions.map((product) => (
+                      <button
+                        key={product.id}
+                        type="button"
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => goToSuggestion(`/products/${product.slug}`)}
+                      >
+                        <span>{product.name}</span>
+                        <small>{product.price ? `${Number(product.price).toLocaleString('fr-FR')} XOF` : 'Produit'}</small>
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
           </form>
           <div className="shop-contact-block">
             <NavLink to="/cart" className="quick-action cart-action">
@@ -145,7 +222,7 @@ function PublicLayout() {
             Accueil
           </NavLink>
           <NavLink to="/catalogue" className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
-            Catalogue
+            Categories
           </NavLink>
           <NavLink to="/track-order" className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
             Suivi commande

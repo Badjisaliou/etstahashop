@@ -172,6 +172,7 @@ img {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.45rem;
+  position: relative;
 }
 
 .market-search input {
@@ -188,6 +189,57 @@ img {
   text-transform: uppercase;
   font-size: 0.82rem;
   font-weight: 800;
+}
+
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.65rem;
+  border-radius: 6px;
+  border: 1px solid rgba(17, 32, 59, 0.1);
+  background: #ffffff;
+  box-shadow: 0 18px 40px rgba(17, 32, 59, 0.18);
+}
+
+.suggestion-group {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.suggestion-group > strong {
+  color: #667085;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+}
+
+.suggestion-group button {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.35rem 0.45rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #18243a;
+  text-align: left;
+  cursor: pointer;
+}
+
+.suggestion-group button:hover {
+  background: #fff3e6;
+  color: #c86400;
+}
+
+.suggestion-group small {
+  color: #667085;
+  white-space: nowrap;
 }
 
 .shop-contact-block,
@@ -1775,6 +1827,7 @@ textarea {
 .product-thumb {
   height: var(--catalog-image-height);
   background: #f7f8fa;
+  position: relative;
 }
 
 .product-card-body {
@@ -1805,6 +1858,52 @@ textarea {
   color: #111827;
   font-size: 0.98rem;
   font-weight: 800;
+}
+
+.product-badges {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.45rem;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.product-badges span {
+  padding: 0.16rem 0.34rem;
+  border-radius: 3px;
+  background: #fff3e6;
+  color: #c86400;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.product-badges span.danger {
+  background: #fff1f1;
+  color: #a12323;
+}
+
+.product-price-stack {
+  display: grid;
+  gap: 0.05rem;
+}
+
+.product-price-stack span {
+  color: #111827;
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.product-price-stack del {
+  color: #8a94a6;
+  font-size: 0.76rem;
+}
+
+.product-card-footer .stock-badge {
+  font-size: 0.74rem;
+  font-weight: 700;
 }
 
 .button,
@@ -2005,13 +2104,19 @@ textarea {
 
 .catalog-search-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 190px;
+  grid-template-columns: minmax(0, 1fr) 180px 170px auto;
   gap: 0.55rem;
+  align-items: center;
 }
 
 .catalog-search-row input,
 .catalog-search-row select {
   min-height: 42px;
+}
+
+.stock-toggle {
+  min-height: 42px;
+  white-space: nowrap;
 }
 
 .product-card-actions {
@@ -2103,6 +2208,37 @@ textarea {
   line-height: 1;
 }
 
+.detail-price-stack {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.detail-price-stack del {
+  color: #8a94a6;
+  font-size: 0.9rem;
+}
+
+.detail-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.detail-badge-row span {
+  width: fit-content;
+  padding: 0.2rem 0.45rem;
+  border-radius: 3px;
+  background: #fff3e6;
+  color: #c86400;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.detail-badge-row span.danger {
+  background: #fff1f1;
+  color: #a12323;
+}
+
 .product-description-block {
   display: grid;
   gap: 0.4rem;
@@ -2147,6 +2283,16 @@ textarea {
 
 .buy-box .button {
   width: 100%;
+}
+
+.whatsapp-button {
+  background: #128c4a;
+  color: #ffffff;
+  border-color: #128c4a;
+}
+
+.whatsapp-button:hover {
+  color: #ffffff;
 }
 
 .buy-box-services {
@@ -2342,6 +2488,13 @@ textarea {
 
   .market-search .search-button {
     display: none;
+  }
+
+  .search-suggestions {
+    left: -2.8rem;
+    right: -5rem;
+    max-height: min(70vh, 420px);
+    overflow-y: auto;
   }
 
   .shop-contact-block {
@@ -2546,5 +2699,85 @@ textarea {
 
   .market-hero-banner .hero-actions {
     margin-top: 0.75rem;
+  }
+}
+
+/* Category-first storefront */
+.product-rail {
+  display: grid;
+  grid-auto-columns: minmax(168px, 188px);
+  grid-auto-flow: column;
+  gap: 0.65rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding: 0.85rem;
+  scroll-snap-type: inline proximity;
+  scrollbar-width: thin;
+}
+
+.product-rail .product-card {
+  width: 100%;
+  scroll-snap-align: start;
+}
+
+.category-directory {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+  padding: 0.85rem;
+}
+
+.category-card-large {
+  min-height: 96px;
+  display: grid;
+  align-content: end;
+  gap: 0.25rem;
+  padding: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid rgba(17, 32, 59, 0.08);
+  background: #ffffff;
+  color: #11203b;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.category-card-large:hover {
+  color: #c86400;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(17, 32, 59, 0.1);
+}
+
+.category-card-large strong {
+  font-size: 0.95rem;
+}
+
+.category-card-large span,
+.market-section-heading span {
+  color: #667085;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 720px) {
+  .product-rail {
+    grid-auto-columns: minmax(148px, 164px);
+    gap: 0.55rem;
+    padding: 0.65rem;
+  }
+
+  .category-directory {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    padding: 0.65rem;
+  }
+
+  .category-card-large {
+    min-height: 82px;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-rail {
+    grid-auto-columns: minmax(142px, 154px);
   }
 }

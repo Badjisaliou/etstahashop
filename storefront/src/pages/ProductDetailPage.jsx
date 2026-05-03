@@ -3,8 +3,42 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
 
+const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 76 990 94 66'
+
 function formatPrice(value) {
   return new Intl.NumberFormat('fr-FR').format(Number(value ?? 0))
+}
+
+function getDiscountPercent(product) {
+  const price = Number(product.price ?? 0)
+  const comparePrice = Number(product.compare_price ?? 0)
+
+  if (!comparePrice || comparePrice <= price || !price) {
+    return 0
+  }
+
+  return Math.round(((comparePrice - price) / comparePrice) * 100)
+}
+
+function getProductBadges(product) {
+  const badges = []
+  const discount = getDiscountPercent(product)
+
+  if (discount > 0) {
+    badges.push(`-${discount}%`)
+  }
+
+  if (product.is_featured) {
+    badges.push('Offre')
+  }
+
+  if (Number(product.stock_quantity ?? 0) <= 0) {
+    badges.push('Rupture')
+  } else if (Number(product.stock_quantity ?? 0) <= 3) {
+    badges.push('Stock limite')
+  }
+
+  return badges
 }
 
 function ProductDetailPage() {
@@ -58,6 +92,14 @@ function ProductDetailPage() {
     return <section className="panel"><p>{message || 'Produit introuvable.'}</p></section>
   }
 
+  const discount = getDiscountPercent(product)
+  const badges = getProductBadges(product)
+  const cleanPhone = SHOP_CONTACT_PHONE.replace(/\D/g, '')
+  const whatsappMessage = encodeURIComponent(
+    `Bonjour ETS TAHA SHOP, je souhaite avoir des informations sur ce produit: ${product.name}`
+  )
+  const whatsappLink = `https://wa.me/${cleanPhone}?text=${whatsappMessage}`
+
   return (
     <div className="product-market-page">
       <button className="mini-button back-link" type="button" onClick={() => navigate(-1)}>
@@ -82,10 +124,20 @@ function ProductDetailPage() {
 
         <article className="product-main-panel">
           <p className="product-category-label">{product.category?.name ?? 'Catalogue'}</p>
+          {badges.length > 0 ? (
+            <div className="detail-badge-row">
+              {badges.map((badge) => (
+                <span key={badge} className={badge === 'Rupture' ? 'danger' : ''}>{badge}</span>
+              ))}
+            </div>
+          ) : null}
           <h2>{product.name}</h2>
           <p className="product-summary">{product.short_description || 'Produit disponible dans la boutique.'}</p>
           <div className="product-price-block">
-            <strong>{formatPrice(product.price)} XOF</strong>
+            <div className="detail-price-stack">
+              <strong>{formatPrice(product.price)} XOF</strong>
+              {discount > 0 ? <del>{formatPrice(product.compare_price)} XOF</del> : null}
+            </div>
             <span className={`stock-badge ${product.stock_quantity > 0 ? 'in' : 'out'}`}>
               {product.stock_quantity > 0 ? `${product.stock_quantity} en stock` : 'Rupture de stock'}
             </span>
@@ -112,6 +164,9 @@ function ProductDetailPage() {
           <Link className="button ghost" to="/cart">
             Voir le panier
           </Link>
+          <a className="button whatsapp-button" href={whatsappLink} target="_blank" rel="noopener noreferrer">
+            Demander sur WhatsApp
+          </a>
           <div className="buy-box-services">
             <span>Livraison suivie</span>
             <span>Paiement confirme manuellement</span>
