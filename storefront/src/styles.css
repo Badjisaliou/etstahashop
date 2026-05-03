@@ -291,18 +291,21 @@ img {
 
 .shop-footer {
   margin-top: 0.5rem;
-  padding: 1.05rem 1.2rem;
-  border-radius: 22px;
+  padding: 0.7rem 0.85rem;
+  border-radius: 8px;
   border: 1px solid rgba(14, 58, 120, 0.12);
   background: rgba(255, 255, 255, 0.86);
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  align-items: center;
+  font-size: 0.86rem;
 }
 
 .shop-footer p {
-  margin: 0.35rem 0 0;
+  margin: 0.15rem 0 0;
   color: #5a687d;
+  font-size: 0.78rem;
 }
 
 .shop-link,
@@ -2232,5 +2235,183 @@ textarea {
 @media (max-width: 480px) {
   .sidebar-block:first-child {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Compact header: logo, search, cart, then the menu carries secondary actions. */
+.shop-header-top {
+  display: grid;
+  grid-template-columns: auto minmax(260px, 1fr) auto;
+  align-items: center;
+}
+
+.shop-contact-block {
+  width: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cart-action {
+  min-width: 102px;
+  background: #fff3e6;
+}
+
+.shop-nav a[href^='https://wa.me'] {
+  color: #128c4a;
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .shop-header-top {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.65rem;
+  }
+
+  .market-search {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+    order: initial;
+  }
+
+  .shop-contact-block {
+    width: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .cart-action {
+    min-width: 88px;
+    text-align: center;
+  }
+
+  .cart-action span {
+    display: none;
+  }
+
+  .cart-action strong {
+    font-size: 0.78rem;
+  }
+}
+
+/* One-line mobile header */
+@media (max-width: 720px) {
+  .shop-header {
+    gap: 0.45rem;
+    padding: 0.45rem;
+  }
+
+  .shop-header-top {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  .brand-lockup.prominent {
+    gap: 0.35rem;
+  }
+
+  .brand-logo.large,
+  .brand-mark.large {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+  }
+
+  .brand-title.large {
+    max-width: 54px;
+    font-size: 0.72rem;
+    line-height: 0.95;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+
+  .market-search {
+    grid-column: auto;
+    display: block;
+    min-width: 0;
+  }
+
+  .market-search input {
+    min-height: 36px;
+    padding: 0.45rem 0.55rem;
+    font-size: 0.78rem;
+  }
+
+  .market-search .search-button {
+    display: none;
+  }
+
+  .shop-contact-block {
+    min-width: 0;
+  }
+
+  .cart-action {
+    min-width: 54px;
+    min-height: 36px;
+    padding: 0.25rem 0.38rem;
+  }
+
+  .cart-action strong {
+    font-size: 0.68rem;
+    line-height: 1.05;
+  }
+
+  .shop-nav-toggle {
+    width: auto;
+    min-height: 36px;
+    padding: 0.35rem 0.48rem;
+    border-radius: 4px;
+    font-size: 0.74rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand-title.large {
+    display: none;
+  }
+
+  .cart-action {
+    min-width: 46px;
+  }
+
+  .cart-action strong {
+    font-size: 0.64rem;
+  }
+}
+
+/* Compact footer */
+.shop-footer .contact-pill {
+  min-height: 34px;
+  padding: 0.38rem 0.58rem;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.shop-footer .contact-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.shop-footer .shop-contact-link {
+  font-size: 0.78rem;
+}
+
+@media (max-width: 720px) {
+  .shop-footer {
+    gap: 0.55rem;
+    padding: 0.6rem;
+    text-align: center;
+  }
+
+  .shop-footer-contact {
+    gap: 0.4rem;
+  }
+
+  .shop-footer .contact-pill {
+    min-height: 32px;
+    padding: 0.34rem 0.5rem;
   }
 }

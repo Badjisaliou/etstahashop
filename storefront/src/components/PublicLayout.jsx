@@ -1,7 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useShopAuth } from '../auth'
-import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
 
 const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
@@ -30,13 +29,8 @@ function PublicLayout() {
   const { cart } = useShop()
   const { customer, logout } = useShopAuth()
   const itemsCount = cart?.items_count ?? 0
-  const [paymentOptions, setPaymentOptions] = useState({})
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
-
-  useEffect(() => {
-    loadPaymentOptions()
-  }, [])
 
   useEffect(() => {
     setMobileMenuOpen(false)
@@ -53,27 +47,14 @@ function PublicLayout() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  async function loadPaymentOptions() {
-    try {
-      const response = await apiRequest('/payment-options')
-      setPaymentOptions(response.data ?? {})
-    } catch {
-      setPaymentOptions({})
-    }
-  }
-
-  const transferNumber = useMemo(() => {
-    return paymentOptions?.wave?.account_number ?? paymentOptions?.orange_money?.account_number ?? SHOP_CONTACT_PHONE
-  }, [paymentOptions])
-
   const whatsappLink = useMemo(() => {
-  const cleanNumber = SHOP_CONTACT_PHONE.replace(/\D/g, '')
-  const message = encodeURIComponent(
-    "Bonjour ETS TAHA SHOP, je souhaite avoir plus d'informations sur vos produits."
-  )
+    const cleanNumber = SHOP_CONTACT_PHONE.replace(/\D/g, '')
+    const message = encodeURIComponent(
+      "Bonjour ETS TAHA SHOP, je souhaite avoir plus d'informations sur vos produits."
+    )
 
-  return `https://wa.me/${cleanNumber}?text=${message}`
-}, [])
+    return `https://wa.me/${cleanNumber}?text=${message}`
+  }, [])
 
   function handleSearch(event) {
     event.preventDefault()
@@ -89,13 +70,6 @@ function PublicLayout() {
   return (
     <main className="shop-shell">
       <header className="shop-header">
-        <div className="market-topbar">
-          <Link to="/track-order">Suivre une commande</Link>
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-            Assistance WhatsApp
-          </a>
-          <a href={`mailto:${SHOP_CONTACT_EMAIL}`}>Vendre avec ETS Taha</a>
-        </div>
         <div className="shop-header-top">
           <Link className="shop-brand" to="/" aria-label="Accueil ETS Taha Shop">
             <span className="brand-lockup prominent">
@@ -124,29 +98,21 @@ function PublicLayout() {
             </button>
           </form>
           <div className="shop-contact-block">
-            <NavLink to={customer ? '/account' : '/login'} className="quick-action">
-              <span>Compte</span>
-              <strong>{customer ? 'Mon espace' : 'Connexion'}</strong>
-            </NavLink>
-            <a className="quick-action" href={whatsappLink} target="_blank" rel="noopener noreferrer">
-              <span>Aide</span>
-              <strong>{SHOP_CONTACT_PHONE}</strong>
-            </a>
             <NavLink to="/cart" className="quick-action cart-action">
               <span>Panier</span>
               <strong>{itemsCount} article{itemsCount > 1 ? 's' : ''}</strong>
             </NavLink>
           </div>
+          <button
+            className="shop-nav-toggle"
+            type="button"
+            aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen((current) => !current)}
+          >
+            {mobileMenuOpen ? 'Fermer' : 'Menu'}
+          </button>
         </div>
-        <button
-          className="shop-nav-toggle"
-          type="button"
-          aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-          aria-expanded={mobileMenuOpen}
-          onClick={() => setMobileMenuOpen((current) => !current)}
-        >
-          {mobileMenuOpen ? 'Fermer' : 'Menu'}
-        </button>
         <nav className={`shop-nav${mobileMenuOpen ? ' open' : ''}`}>
           <NavLink to="/" end className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
             Accueil
@@ -157,6 +123,9 @@ function PublicLayout() {
           <NavLink to="/track-order" className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
             Suivi commande
           </NavLink>
+          <a className="shop-link" href={whatsappLink} target="_blank" rel="noopener noreferrer">
+            Aide WhatsApp
+          </a>
           <NavLink to="/cart" className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
             Panier ({itemsCount})
           </NavLink>
