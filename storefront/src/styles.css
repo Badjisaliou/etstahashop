@@ -2415,3 +2415,136 @@ textarea {
     padding: 0.34rem 0.5rem;
   }
 }
+
+/* Left drawer mobile menu and lighter home hero */
+.menu-backdrop,
+.mobile-menu-head,
+.mobile-menu-categories {
+  display: none;
+}
+
+.market-hero {
+  grid-template-columns: 220px minmax(0, 1fr);
+}
+
+.market-hero-banner {
+  min-height: 230px;
+  padding: 1.35rem 1.5rem;
+}
+
+.market-hero-banner h1 {
+  font-size: clamp(1.35rem, 3.2vw, 2.15rem);
+}
+
+.market-hero-banner .shop-lead {
+  margin-top: 0.65rem;
+}
+
+@media (max-width: 720px) {
+  .menu-backdrop.open {
+    position: fixed;
+    inset: 0;
+    z-index: 48;
+    display: block;
+    border: 0;
+    background: rgba(17, 24, 39, 0.42);
+    cursor: pointer;
+  }
+
+  .mobile-menu-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid rgba(17, 32, 59, 0.08);
+  }
+
+  .mobile-menu-head button {
+    min-height: 32px;
+    border: 0;
+    border-radius: 4px;
+    background: #fff3e6;
+    color: #c86400;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .shop-nav {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 49;
+    width: min(82vw, 320px);
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.45rem;
+    padding: 0.85rem;
+    overflow-y: auto;
+    background: #ffffff;
+    box-shadow: 18px 0 40px rgba(17, 32, 59, 0.22);
+    transform: translateX(-105%);
+    transition: transform 180ms ease;
+  }
+
+  .shop-nav.open {
+    display: flex;
+    transform: translateX(0);
+  }
+
+  .shop-link,
+  .shop-nav .button.ghost {
+    justify-content: flex-start;
+    min-height: 40px;
+    padding: 0.55rem 0.65rem;
+    text-align: left;
+  }
+
+  .mobile-menu-categories {
+    display: grid;
+    gap: 0.4rem;
+    margin-top: 0.65rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(17, 32, 59, 0.08);
+  }
+
+  .mobile-menu-categories > strong {
+    font-size: 0.9rem;
+  }
+
+  .mobile-menu-categories > span {
+    color: #667085;
+    font-size: 0.82rem;
+  }
+
+  .market-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .market-category-panel {
+    display: none;
+  }
+
+  .market-hero-banner {
+    min-height: 170px;
+    padding: 1rem;
+  }
+
+  .market-hero-banner h1 {
+    max-width: 20ch;
+    font-size: 1.25rem;
+  }
+
+  .market-hero-banner .shop-lead {
+    max-width: 32ch;
+    font-size: 0.84rem;
+  }
+
+  .market-hero-banner .hero-actions {
+    margin-top: 0.75rem;
+  }
+}

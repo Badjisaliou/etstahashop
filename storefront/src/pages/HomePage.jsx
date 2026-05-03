@@ -36,7 +36,6 @@ function HomePage() {
 
   const heroCategories = categories.slice(0, 10)
   const dealProducts = featuredProducts.slice(0, 6)
-  const recommendedProducts = featuredProducts.slice(0, 12)
 
   return (
     <div className="market-home">
@@ -72,26 +71,9 @@ function HomePage() {
           </div>
         </div>
 
-        <aside className="market-promo-stack">
-          <Link className="promo-tile" to="/catalogue">
-            <span>Livraison suivie</span>
-            <strong>Commandes locales</strong>
-          </Link>
-          <Link className="promo-tile accent" to="/cart">
-            <span>Paiement simple</span>
-            <strong>Confirmation manuelle</strong>
-          </Link>
-        </aside>
       </section>
 
       {error ? <p className="message error">{error}</p> : null}
-
-      <section className="market-service-row reveal-up">
-        <span>Support local</span>
-        <span>Prix en XOF</span>
-        <span>Panier rapide</span>
-        <span>Suivi commande</span>
-      </section>
 
       <section className="market-section deal-section reveal-up">
         <div className="market-section-heading">
@@ -153,40 +135,6 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="market-section reveal-up">
-        <div className="market-section-heading">
-          <h2>Recommande pour vous</h2>
-          <Link to="/catalogue">Voir plus</Link>
-        </div>
-        <div className="catalog-grid catalog-grid-fixed">
-          {recommendedProducts.map((product, index) => (
-            <article className="product-card product-card-animated" key={product.id} style={{ animationDelay: `${index * 35}ms` }}>
-              <div className="product-thumb">
-                {product.images?.[0]?.url ? (
-                  <img
-                    src={product.images[0].url}
-                    alt={product.images[0].alt_text || product.name}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : (
-                  <span>Aucune image</span>
-                )}
-              </div>
-              <div className="product-card-body">
-                <strong>{product.name}</strong>
-                <p>{product.short_description || 'Produit disponible dans le catalogue.'}</p>
-                <div className="product-card-footer">
-                  <span>{formatPrice(product.price)} XOF</span>
-                  <Link className="mini-button" to={`/products/${product.slug}`}>
-                    Voir
-                  </Link>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
     </div>
   )
 }

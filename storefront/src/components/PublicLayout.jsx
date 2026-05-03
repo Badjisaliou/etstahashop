@@ -1,6 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useShopAuth } from '../auth'
+import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
 
 const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
@@ -31,6 +32,11 @@ function PublicLayout() {
   const itemsCount = cart?.items_count ?? 0
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    loadCategories()
+  }, [])
 
   useEffect(() => {
     setMobileMenuOpen(false)
@@ -55,6 +61,15 @@ function PublicLayout() {
 
     return `https://wa.me/${cleanNumber}?text=${message}`
   }, [])
+
+  async function loadCategories() {
+    try {
+      const response = await apiRequest('/categories')
+      setCategories(response.data ?? [])
+    } catch {
+      setCategories([])
+    }
+  }
 
   function handleSearch(event) {
     event.preventDefault()
@@ -113,7 +128,19 @@ function PublicLayout() {
             {mobileMenuOpen ? 'Fermer' : 'Menu'}
           </button>
         </div>
+        <button
+          className={`menu-backdrop${mobileMenuOpen ? ' open' : ''}`}
+          type="button"
+          aria-label="Fermer le menu"
+          onClick={() => setMobileMenuOpen(false)}
+        />
         <nav className={`shop-nav${mobileMenuOpen ? ' open' : ''}`}>
+          <div className="mobile-menu-head">
+            <strong>Menu</strong>
+            <button type="button" onClick={() => setMobileMenuOpen(false)}>
+              Fermer
+            </button>
+          </div>
           <NavLink to="/" end className={({ isActive }) => `shop-link${isActive ? ' active' : ''}`}>
             Accueil
           </NavLink>
@@ -148,6 +175,18 @@ function PublicLayout() {
               </NavLink>
             </>
           )}
+          <div className="mobile-menu-categories">
+            <strong>Categories</strong>
+            {categories.length === 0 ? (
+              <span>Aucune categorie disponible</span>
+            ) : (
+              categories.map((category) => (
+                <NavLink key={category.id} to={`/catalogue?category=${category.slug}`} className="shop-link">
+                  {category.name}
+                </NavLink>
+              ))
+            )}
+          </div>
         </nav>
       </header>
 
