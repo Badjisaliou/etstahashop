@@ -4,9 +4,9 @@
 
 - Titres, descriptions, canonical et Open Graph par route publique.
 - Fiches produit : nom en H1, données Product/Offer (prix XOF et stock réels).
-- Pages client, recherche et filtres exclus de l'index via noindex,follow. Le catalogue principal reste indexable.
+- Pages client, recherche et filtres de tri/pagination exclus de l'index via noindex,follow. Le catalogue principal et les catégories valides sans autres paramètres restent indexables, avec canonical propre à chaque catégorie et titre spécifique.
 - robots.txt autorise les robots ; les pages noindex restent explorables pour que Google lise cette directive.
-- sitemap.xml généré à chaque build, incluant tous les produits actifs obtenus par pagination de l'API publique.
+- sitemap.xml généré à chaque build, incluant les catégories et tous les produits actifs obtenus par pagination de l'API publique. Utiliser les URL avec le slug réel fourni par l'API, pas le nom saisi manuellement.
 - Les erreurs de chargement produit n'affichent plus les données du produit précédent.
 - Page introuvable visible pour les routes inconnues, avec noindex.
 

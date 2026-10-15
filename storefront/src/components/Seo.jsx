@@ -3,14 +3,17 @@ import { useLocation } from 'react-router-dom'
 const origin = (import.meta.env.VITE_SITE_URL || 'https://etstahashop.com').replace(/\/$/, '')
 const description = 'Découvrez le catalogue ETS Taha Shop : produits, prix en XOF, disponibilité et commande en ligne. Contactez notre équipe pour vous accompagner.'
 
-export default function Seo({ product, unavailable = false }) {
+export default function Seo({ product, category, unavailable = false }) {
   const { pathname, search } = useLocation()
   const isProduct = pathname.startsWith('/products/')
   const isPublic = pathname === '/' || pathname === '/catalogue' || isProduct
-  const noindex = !isPublic || unavailable || (pathname === '/catalogue' && Boolean(search))
-  const title = product ? `${product.name} | ETS Taha Shop` : pathname === '/catalogue' ? 'Catalogue et prix | ETS Taha Shop' : isPublic ? 'ETS Taha Shop | Boutique en ligne' : 'Espace client | ETS Taha Shop'
-  const summary = product ? String(product.short_description || product.description || description).replace(/<[^>]*>/g, '').slice(0, 170) : description
-  const url = `${origin}${pathname}`
+  const params = new URLSearchParams(search)
+  const filtered = [...params.keys()].some(key => key !== 'category')
+  const noindex = !isPublic || unavailable || (pathname === '/catalogue' && filtered)
+  const title = product ? `${product.name} | ETS Taha Shop` : category ? `${category.name} : catalogue et prix | ETS Taha Shop` : pathname === '/catalogue' ? 'Catalogue et prix | ETS Taha Shop' : isPublic ? 'ETS Taha Shop | Boutique en ligne' : 'Espace client | ETS Taha Shop'
+  const summary = product ? String(product.short_description || product.description || description).replace(/<[^>]*>/g, '').slice(0, 170) : category ? `Découvrez les produits de la catégorie ${category.name} chez ETS Taha Shop : prix en XOF, disponibilité et commande en ligne.` : description
+  const categorySlug = category?.slug || params.get('category')
+  const url = `${origin}${pathname}${pathname === '/catalogue' && categorySlug ? `?category=${encodeURIComponent(categorySlug)}` : ''}`
   const image = product?.images?.[0]?.url
   const structured = product ? {
     '@context': 'https://schema.org', '@type': 'Product', name: product.name,

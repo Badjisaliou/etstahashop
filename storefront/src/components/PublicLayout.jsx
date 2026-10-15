@@ -126,7 +126,7 @@ function PublicLayout() {
 
   return (
     <main className="shop-shell">
-      {!location.pathname.startsWith('/products/') ? <Seo /> : null}
+      {!location.pathname.startsWith('/products/') && location.pathname !== '/catalogue' ? <Seo /> : null}
       <header className="shop-header">
         <div className="shop-header-top">
           <Link className="shop-brand" to="/" aria-label="Accueil ETS Taha Shop">

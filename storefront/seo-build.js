@@ -8,6 +8,11 @@ export function seoAssets(env) {
       const paths = ['/', '/catalogue']
       if (env.VITE_API_URL) {
         try {
+          const categoriesResponse = await fetch(`${env.VITE_API_URL.replace(/\/$/, '')}/categories`, { signal: AbortSignal.timeout(10000) })
+          if (!categoriesResponse.ok) throw new Error(`Categories API HTTP ${categoriesResponse.status}`)
+          const categories = await categoriesResponse.json()
+          if (!Array.isArray(categories.data)) throw new Error('Invalid categories response')
+          for (const category of categories.data) paths.push(`/catalogue?category=${encodeURIComponent(category.slug)}`)
           let page = 1
           let lastPage = 1
           do {

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
+import Seo from '../components/Seo'
 
 function formatPrice(value) {
   return new Intl.NumberFormat('fr-FR').format(Number(value ?? 0))
@@ -44,6 +45,7 @@ function CatalogPage() {
   const { addToCart } = useShop()
   const [searchParams, setSearchParams] = useSearchParams()
   const [categories, setCategories] = useState([])
+  const [categoriesLoaded, setCategoriesLoaded] = useState(false)
   const [products, setProducts] = useState([])
   const [pagination, setPagination] = useState({ current_page: 1, last_page: 1, total: 0 })
   const [loading, setLoading] = useState(true)
@@ -75,6 +77,7 @@ function CatalogPage() {
     try {
       const response = await apiRequest('/categories')
       setCategories(response.data ?? [])
+      setCategoriesLoaded(true)
     } catch (error) {
       setMessage(error.message)
       setCategories([])
@@ -172,6 +175,7 @@ function CatalogPage() {
   if (isCategoryIndex) {
     return (
       <div className="categories-page">
+        <Seo />
         <section className="market-section reveal-up">
           <div className="market-section-heading">
             <h2>Categories</h2>
@@ -193,6 +197,7 @@ function CatalogPage() {
 
   return (
     <div className="catalog-market-layout">
+      <Seo category={selectedCategory} unavailable={Boolean(filters.category) && categoriesLoaded && !selectedCategory} />
       <aside className="catalog-sidebar reveal-up">
         <div className="sidebar-block">
           <strong>Categories</strong>
