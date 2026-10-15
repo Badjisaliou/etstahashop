@@ -85,7 +85,6 @@ function HomePage() {
     }
   }
 
-  const heroCategories = categories.slice(0, 10)
   const dealProducts = featuredProducts.slice(0, 6)
 
   async function handleAddToCart(productId) {
@@ -171,33 +170,12 @@ function HomePage() {
   return (
     <div className="market-home">
       <section className="market-hero reveal-up">
-        <aside className="market-category-panel">
-          <strong>Categories</strong>
-          <div className="market-category-list">
-            {heroCategories.length === 0 ? (
-              <span className="muted-line">{loading ? 'Chargement...' : 'Aucune categorie'}</span>
-            ) : (
-              heroCategories.map((category) => (
-                <Link key={category.id} to={`/catalogue?category=${category.slug}`}>
-                  {category.name}
-                </Link>
-              ))
-            )}
-          </div>
-        </aside>
-
         <div className="market-hero-banner">
           <p className="eyebrow">ETS Taha Shop</p>
-          <h1 className="shop-title">Toutes vos bonnes affaires au meme endroit.</h1>
-          <p className="shop-lead">
-            Commandez vos produits en ligne, suivez votre panier et profitez d un service local a Dakar.
-          </p>
+          <h1 className="shop-title">Vos bonnes affaires au meme endroit.</h1>
           <div className="hero-actions">
             <Link className="button primary" to="/catalogue">
               Voir les offres
-            </Link>
-            <Link className="button ghost light" to="/track-order">
-              Suivre ma commande
             </Link>
           </div>
         </div>

@@ -2577,20 +2577,21 @@ textarea {
 }
 
 .market-hero {
-  grid-template-columns: 220px minmax(0, 1fr);
+  display: block;
 }
 
 .market-hero-banner {
-  min-height: 230px;
-  padding: 1.35rem 1.5rem;
+  min-height: 0;
+  padding: 0.85rem 1.25rem;
 }
 
 .market-hero-banner h1 {
-  font-size: clamp(1.35rem, 3.2vw, 2.15rem);
+  max-width: none;
+  font-size: clamp(1.2rem, 2.5vw, 1.65rem);
 }
 
-.market-hero-banner .shop-lead {
-  margin-top: 0.65rem;
+.market-hero-banner .hero-actions {
+  margin-top: 0.55rem;
 }
 
 @media (max-width: 720px) {
@@ -2683,22 +2684,17 @@ textarea {
   }
 
   .market-hero-banner {
-    min-height: 170px;
-    padding: 1rem;
+    min-height: 0;
+    padding: 0.75rem 0.85rem;
   }
 
   .market-hero-banner h1 {
-    max-width: 20ch;
-    font-size: 1.25rem;
-  }
-
-  .market-hero-banner .shop-lead {
-    max-width: 32ch;
-    font-size: 0.84rem;
+    max-width: none;
+    font-size: 1.1rem;
   }
 
   .market-hero-banner .hero-actions {
-    margin-top: 0.75rem;
+    margin-top: 0.45rem;
   }
 }
 

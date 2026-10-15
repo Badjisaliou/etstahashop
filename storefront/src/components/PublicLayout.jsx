@@ -3,10 +3,11 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import { useShopAuth } from '../auth'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
+import Seo from './Seo'
 
 const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
 const SHOP_CONTACT_EMAIL = 'etstahashop@gmail.com'
-const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 76 990 94 66'
+const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 76 907 88 09'
 
 function MailIcon() {
   return (
@@ -125,6 +126,7 @@ function PublicLayout() {
 
   return (
     <main className="shop-shell">
+      {!location.pathname.startsWith('/products/') ? <Seo /> : null}
       <header className="shop-header">
         <div className="shop-header-top">
           <Link className="shop-brand" to="/" aria-label="Accueil ETS Taha Shop">

@@ -45,6 +45,7 @@ function App() {
             <Route path="/track-order" element={<TrackOrderPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="*" element={<section className="panel"><h1>Page introuvable</h1><a href="/catalogue">Consulter le catalogue</a></section>} />
             <Route element={<ProtectedShopRoute />}>
               <Route path="/account" element={<AccountPage />} />
             </Route>

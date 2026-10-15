@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
+import Seo from '../components/Seo'
 
-const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 76 990 94 66'
+const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 76 907 88 09'
 
 function formatPrice(value) {
   return new Intl.NumberFormat('fr-FR').format(Number(value ?? 0))
@@ -52,19 +53,23 @@ function ProductDetailPage() {
   const [adding, setAdding] = useState(false)
 
   useEffect(() => {
-    loadProduct()
+    const controller = new AbortController()
+    loadProduct(controller.signal)
+    return () => controller.abort()
   }, [slug])
 
-  async function loadProduct() {
+  async function loadProduct(signal) {
     try {
       setLoading(true)
-      const response = await apiRequest(`/products/${slug}`)
+      setProduct(null)
+      const response = await apiRequest(`/products/${slug}`, { signal })
       setProduct(response.data)
       setMessage('')
     } catch (error) {
+      if (signal.aborted) return
       setMessage(error.message)
     } finally {
-      setLoading(false)
+      if (!signal.aborted) setLoading(false)
     }
   }
 
@@ -85,11 +90,11 @@ function ProductDetailPage() {
   }
 
   if (loading) {
-    return <section className="panel"><p>Chargement du produit...</p></section>
+    return <section className="panel"><Seo /><p>Chargement du produit...</p></section>
   }
 
   if (!product) {
-    return <section className="panel"><p>{message || 'Produit introuvable.'}</p></section>
+    return <section className="panel"><Seo unavailable /><h1>Produit indisponible</h1><p>{message || 'Produit introuvable.'}</p><Link to="/catalogue">Retour au catalogue</Link></section>
   }
 
   const discount = getDiscountPercent(product)
@@ -102,6 +107,7 @@ function ProductDetailPage() {
 
   return (
     <div className="product-market-page">
+      <Seo product={product} />
       <button className="mini-button back-link" type="button" onClick={() => navigate(-1)}>
         Retour
       </button>
@@ -131,7 +137,7 @@ function ProductDetailPage() {
               ))}
             </div>
           ) : null}
-          <h2>{product.name}</h2>
+          <h1>{product.name}</h1>
           <p className="product-summary">{product.short_description || 'Produit disponible dans la boutique.'}</p>
           <div className="product-price-block">
             <div className="detail-price-stack">
