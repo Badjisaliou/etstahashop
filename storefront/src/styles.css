@@ -2777,3 +2777,25 @@ textarea {
     grid-auto-columns: minmax(142px, 154px);
   }
 }
+
+/* Conditions de retour : couleurs et panneaux de la boutique. */
+.returns-policy { padding: clamp(1rem, 4vw, 3rem); min-width: 0; }
+.returns-heading { max-width: 780px; }
+.returns-policy h1 { max-width: none; font-size: clamp(1.7rem, 4vw, 2.6rem); line-height: 1.2; color: var(--brand-blue-strong); }
+.returns-eyebrow { color: var(--brand-blue); font-weight: 800; margin-top: 1.5rem; }
+.returns-policy a, .returns-footer-link { color: var(--brand-blue); text-underline-offset: 3px; overflow-wrap: anywhere; }
+.returns-policy a:hover, .returns-footer-link:hover { color: #a44b00; }
+.returns-policy a:focus-visible, .returns-footer-link:focus-visible { outline: 3px solid var(--brand-gold); outline-offset: 4px; }
+.returns-notice { background: #fff5e9; border-left: 4px solid var(--brand-gold); padding: 1.1rem 1.3rem; margin: 1.5rem 0; border-radius: 6px; }
+.returns-notice p:last-child { margin-bottom: 0; }
+.returns-toc { display: flex; flex-wrap: wrap; gap: .65rem 1.2rem; padding: 1rem 0; border-block: 1px solid #dce3ec; }
+.returns-policy section { max-width: 850px; margin-top: 2rem; scroll-margin-top: 190px; }
+.returns-policy h2 { font-size: 1.3rem; color: var(--brand-blue-strong); }
+.returns-policy h3 { font-size: 1rem; margin-top: 1.4rem; }
+.returns-policy li + li { margin-top: .5rem; }
+.returns-sources { border-top: 1px solid #dce3ec; padding-top: 1rem; font-size: .9rem; }
+.returns-footer-link { display: inline-block; max-width: 32ch; }
+@media (max-width: 720px) {
+  .returns-policy section { scroll-margin-top: 150px; }
+  .returns-toc { flex-direction: column; }
+}

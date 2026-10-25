@@ -1,13 +1,12 @@
-﻿import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useShopAuth } from '../auth'
 import { apiRequest } from '../lib/api'
 import { useShop } from '../shop'
 import Seo from './Seo'
+import { SHOP_CONTACT_EMAIL, SHOP_CONTACT_PHONE } from '../lib/contact'
 
 const BRAND_LOGO_URL = import.meta.env.VITE_BRAND_LOGO_URL ?? ''
-const SHOP_CONTACT_EMAIL = 'etstahashop@gmail.com'
-const SHOP_CONTACT_PHONE = import.meta.env.VITE_SHOP_CONTACT_PHONE ?? '+221 76 907 88 09'
 
 function MailIcon() {
   return (
@@ -275,6 +274,7 @@ function PublicLayout() {
         <div>
           <strong>ETS TAHA SHOP</strong>
           <p>Votre boutique de vente en ligne.</p>
+          <Link className="returns-footer-link" to="/conditions-retour-remboursement">Conditions de retour et de remboursement</Link>
         </div>
         <div className="shop-footer-contact">
           <a className="shop-contact-item contact-pill" href={`mailto:${SHOP_CONTACT_EMAIL}`}>

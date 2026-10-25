@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import RegisterPage from './pages/RegisterPage'
 import TrackOrderPage from './pages/TrackOrderPage'
+import ReturnsPolicyPage from './pages/ReturnsPolicyPage'
 
 function ProtectedShopRoute() {
   const location = useLocation()
@@ -43,6 +44,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/track-order" element={<TrackOrderPage />} />
+            <Route path="/conditions-retour-remboursement" element={<ReturnsPolicyPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="*" element={<section className="panel"><h1>Page introuvable</h1><a href="/catalogue">Consulter le catalogue</a></section>} />
